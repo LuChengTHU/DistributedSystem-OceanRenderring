@@ -1,39 +1,35 @@
 package mapreduce;
 
 import core.Complex;
+import core.H;
 import core.Vec2;
+import java.util.Random;
 
 public class main {
 
-    public static int N = 512; // grad size
+    public static int N = 256; // grad size
     public static int L = 1000;
     public static float g = 9.81f;
-    public static float PI = 3.1415926535897932384626433832795f;
-    public static Vec2 w = new Vec2()
+    public static int T = 100; // num of frames
 
+    public static Vec2 wDirection = new Vec2(1.0f, 0); // wind (1, 0)
+    public static float wSpeed = 26f;
+    public static Random random = new Random();
+    public static float A = 20f;
 
     public static void generateH0k() {
-        Complex[] h0k = new Complex[N * N];
-        // k = (kx, kz), kx = 2πn/Lx, kz = 2πm/Lz
-        // −N/2 ≤ n < N/2
-        // −M/2 ≤ m < M/2.
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                int n = -N/2 + i;
-                int m = -N/2 + j;
-                Vec2 k = new Vec2(2*PI*n/L, 2*PI*m/L);
 
-            }
-        }
-        for (int n = -N/2; n < N/2; n++) {
-            for (int m = -N/2; m < N/2; m++) {
+        H h0k = new H(N, L, A, wDirection, wSpeed, random);
+        h0k.init();
+    }
 
-            }
-        }
-
+    public static void generateHkt() {
 
     }
     public static void main(String[] args) throws Exception {
+        generateH0k();
+        for (int i = 0; i < T; i++) {
 
+        }
     }
 }
