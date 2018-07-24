@@ -1,10 +1,11 @@
 package mapreduce;
 
-import mapreduce.Complex;
-import core.FFT;
-import mapreduce.Vec2;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FSDataOutputStream;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.Random;
 
 public class main {
@@ -43,7 +44,7 @@ public class main {
         float w0 = 2 * PI / 200.0f;
         return (float)Math.floor(Math.sqrt(k.length() * g) / w0) * w0;
     }
-    public static void generateH0k() {
+    public static void generateH0k() throws IOException {
         Complex[] h0k = new Complex[N*N];
         Complex[] h0minusk = new Complex[N*N];
         float log_2 = (float)Math.log(2);
@@ -60,9 +61,17 @@ public class main {
             }
         }
 
+        Configuration conf = new Configuration();
+        FileSystem fs = FileSystem.get(conf);
+
         for (int t = 0; t < T; t++) {
             Complex[] hkt = new Complex[N*N];
+
+            FSDataOutputStream out = fs.create(new Path("OceanFFT/Hdata/" + "frame_"+ t + ".txt"));
+            StringBuffer buffer = new StringBuffer();
             for (int i = 0; i < N; i++) {
+                buffer.append(i);
+                buffer.append("\t");
                 for (int j = 0; j < N; j++) {
                     int n = -N / 2 + i;
                     int m = -N / 2 + j;
@@ -73,9 +82,17 @@ public class main {
                     Complex c0 = new Complex(real, im);
                     Complex c1 = new Complex(real, -im);
                     hkt[i*N+j] = c0.mul(h0k[i*N+j]).add(c1.mul(h0minusk[i*N+j]));
+                    if (j > 0)
+                        buffer.append(" ");
+                    buffer.append(hkt[i*N+j].getReal());
+                    buffer.append(",");
+                    buffer.append(hkt[i*N+j].getIm());
                     //System.out.println("i="+i+" j="+j+":"+hkt[i*N+j].getReal() + " i"+hkt[i*N+j].getIm());
                 }
+                buffer.append("\n");
             }
+            out.writeChars(buffer.toString());
+            out.close();
         }
     }
 
@@ -85,16 +102,6 @@ public class main {
 
     public static void main(String[] args) throws Exception {
         generateH0k();
-        ArrayList<Complex> in = new ArrayList<Complex>() ;
-        for(int i = 0; i < (1<<3); i ++)
-            in.add(new Complex(i, 0)) ;
-        System.out.println("Start FFT...\n") ;
-        FFT.calcFFT(in) ;
-        for(int i = 0; i < in.size(); i ++)
-            System.out.println(in.get(i)) ;
-        /*for (int i = 0; i < T; i++) {
-
-        }*/
         Integer x;
     }
 
