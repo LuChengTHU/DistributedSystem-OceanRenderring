@@ -1,4 +1,6 @@
 package core;
+import mapreduce.Complex;
+
 import java.util.List;
 import java.util.Random;
 
@@ -45,13 +47,11 @@ public class FFT {
             a = in.get(ss+base) ;
             b = in.get(ss+base+step) ;
             System.out.printf("Calc: a = %s, b = %s, w = %s\n", a, b, w[i<<deep]);
-            if(flag == 0) b.mul(w[i<<deep]) ;
+            if(flag == 0) b = b.mul(w[i<<deep]) ;
             //else b = b/w[i<<deep] ;
             System.out.printf("CalcAfter: a = %s, b = %s\n", a, b);
-            temp[i]  = new Complex(a.getReal(), a.getIm()) ;
-            temp[i+half] = new Complex(a.getReal(), a.getIm()) ;
-            temp[i].add(b) ;
-            temp[i+half].sub(b) ;
+            temp[i] = a.add(b) ;
+            temp[i+half] = a.sub(b) ;
             ss += (step<<1) ;
         }
         System.out.printf("\n");
