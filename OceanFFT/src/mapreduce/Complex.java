@@ -1,4 +1,4 @@
-package core;
+package mapreduce;
 
 public class Complex {
 
@@ -11,10 +11,11 @@ public class Complex {
         this.im   = im;
     }
 
-    public void add(Complex c)
+    public Complex add(Complex c)
     {
         real += c.real;
         im   += c.im;
+        return new Complex(real + c.real, im + c.im);
     }
 
     public void sub(Complex c)
@@ -23,16 +24,18 @@ public class Complex {
         im   -= c.im;
     }
 
-    public void mul(Complex c)
+    public Complex mul(Complex c)
     {
-        real = real * c.real - im * c.im;
-        im   = real * c.im   + im * c.real;
+        return new Complex(real * c.real - im * c.im, real * c.im   + im * c.real);
     }
 
-    public void mul(float i)
+    public Complex mul(float i)
     {
-        real *= i;
-        im   *= i;
+        return new Complex(real * i, im * i);
+    }
+
+    public Complex conj() {
+        return new Complex(real, -im);
     }
 
     public float getReal() {
