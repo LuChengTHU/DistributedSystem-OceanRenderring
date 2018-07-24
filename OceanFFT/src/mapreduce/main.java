@@ -1,8 +1,11 @@
 package mapreduce;
 
 import core.Complex;
+import core.FFT;
 import core.H;
 import core.Vec2;
+
+import java.util.ArrayList;
 import java.util.Random;
 
 public class main {
@@ -28,8 +31,15 @@ public class main {
     }
     public static void main(String[] args) throws Exception {
         generateH0k();
-        for (int i = 0; i < T; i++) {
+        ArrayList<Complex> in = new ArrayList<Complex>() ;
+        for(int i = 0; i < (1<<2); i ++)
+            in.add(new Complex(i, 0)) ;
+        System.out.println("Start FFT...\n") ;
+        FFT.calcFFT(in) ;
+        for(int i = 0; i < in.size(); i ++)
+            System.out.println(in.get(i)) ;
+        /*for (int i = 0; i < T; i++) {
 
-        }
+        }*/
     }
 }

@@ -1,5 +1,8 @@
 package core;
 
+import java.io.OutputStream;
+import java.util.stream.Stream;
+
 public class Complex {
 
     private float real;
@@ -9,6 +12,11 @@ public class Complex {
     {
         this.real = real;
         this.im   = im;
+    }
+    public Complex(double real, double im)
+    {
+        this.real = (float)real;
+        this.im   = (float)im;
     }
 
     public void add(Complex c)
@@ -51,4 +59,8 @@ public class Complex {
         this.im = im;
     }
 
+    @Override
+    public String toString() {
+        return String.format("(%f, %f)", real, im);
+    }
 }
