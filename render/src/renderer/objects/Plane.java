@@ -4,6 +4,7 @@ import renderer.utils.Color;
 import renderer.utils.Vec3d;
 
 import java.io.IOException;
+import java.util.StringTokenizer;
 
 import static renderer.utils.Vec3d.EPS;
 
@@ -22,17 +23,21 @@ public class Plane extends Primitive {
     @Override
     public void input(String var, String value) throws IOException {
         if (var.equals("N=")) N.input(value);
-        if (var.equals("R=")) R = Double.parseDouble(value);
         if (var.equals("Dx=")) Dx.input(value);
         if (var.equals("Dy=")) Dy.input(value);
         super.input(var, value);
-        N = N.normalize();
+        StringTokenizer tk = new StringTokenizer(value);
+        if (tk.hasMoreTokens()) {
+            value = tk.nextToken();
+        }
+        if (var.equals("R=")) R = Double.parseDouble(value);
     }
 
     @Override
     public Collider collide(Vec3d ray_O, Vec3d ray_V) {
         Collider collider = new Collider();
         ray_V = ray_V.normalize();
+        N = N.normalize();
         double d = N.dot(ray_V);
         if (Math.abs(d) < EPS) return collider;
         double l = ((N.mul(R)).sub(ray_O)).dot(N) / d;
@@ -45,6 +50,7 @@ public class Plane extends Primitive {
         collider.front = (d < 0);
         collider.C = ray_O.add(ray_V.mul(collider.dist));
         collider.N = (collider.front) ? N : N.inv();
+
         return collider;
     }
 

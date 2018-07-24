@@ -1,6 +1,7 @@
 package renderer.utils;
 
 import java.io.*;
+import java.util.StringTokenizer;
 
 import static renderer.utils.Vec3d.EPS;
 
@@ -54,13 +55,31 @@ public class Material {
     public void input(String var, String value) throws IOException {
         if (var.equals("color=")) color.input(value);
         if (var.equals("absor=")) absor.input(value);
+        if (var.equals("texture=")) {
+            texture = new Bmp();
+            texture.input(value);
+        }
+        StringTokenizer tk = new StringTokenizer(value);
+        if (tk.hasMoreTokens()) {
+            value = tk.nextToken();
+        }
         if (var.equals("refl=")) refl = Double.parseDouble(value);
         if (var.equals("refr=")) refr = Double.parseDouble(value);
         if (var.equals("diff=")) diff = Double.parseDouble(value);
         if (var.equals("spec=")) spec = Double.parseDouble(value);
         if (var.equals("drefl=")) drefl = Double.parseDouble(value);
         if (var.equals("rindex=")) rindex = Double.parseDouble(value);
-        if (var.equals("texture=")) texture.input(value);
+    }
+
+    @Override public String toString() {
+        return ",color=" + color.toString()
+                + ",absor=" + absor.toString()
+                + ",refl=" + refl
+                + ",refr=" + refr
+                + ",diff=" + diff
+                + ",spec=" + spec
+                + ",rindex=" + rindex
+                + ",drefl=" + drefl;
     }
 
 }

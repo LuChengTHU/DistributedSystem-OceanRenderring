@@ -8,6 +8,10 @@ public class BooleanPtr {
         val = false;
     }
 
+    public BooleanPtr(boolean v) {
+        val = v;
+    }
+
     public BooleanPtr set(boolean v) {
         val = v;
         return this;

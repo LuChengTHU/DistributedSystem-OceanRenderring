@@ -259,4 +259,9 @@ public class Vec3d {
         }
         return false;
     }
+
+    @Override
+    public String toString() {
+        return "(" + x + "," + y + "," + z + ")";
+    }
 }

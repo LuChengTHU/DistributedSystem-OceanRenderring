@@ -67,7 +67,10 @@ public class Scene {
             Primitive new_primitive = null;
             Light new_light = null;
             StringTokenizer tk = new StringTokenizer(str);
-            String var = tk.nextToken();
+            String var = "";
+            if (tk.hasMoreTokens()) {
+                var = tk.nextToken();
+            }
             if (var.equals("primitive")) {
                 String type = tk.nextToken();
                 if (type.equals("sphere")) new_primitive = new Sphere();

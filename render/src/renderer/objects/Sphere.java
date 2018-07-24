@@ -5,6 +5,7 @@ import renderer.utils.Color;
 import renderer.utils.Vec3d;
 
 import java.io.IOException;
+import java.util.StringTokenizer;
 
 import static renderer.utils.Vec3d.EPS;
 
@@ -23,10 +24,14 @@ public class Sphere extends Primitive{
     @Override
     public void input(String var, String value) throws IOException {
         if (var.equals("O=")) O.input(value);
-        if (var.equals("R=")) R = Double.parseDouble(value);
         if (var.equals("De=")) De.input(value);
         if (var.equals("Dc=")) Dc.input(value);
         super.input(var, value);
+        StringTokenizer tk = new StringTokenizer(value);
+        if (tk.hasMoreTokens()) {
+            value = tk.nextToken();
+        }
+        if (var.equals("R=")) R = Double.parseDouble(value);
     }
 
     @Override

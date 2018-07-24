@@ -4,6 +4,8 @@ import renderer.utils.Color;
 import renderer.utils.Vec3d;
 import renderer.utils.Bmp;
 
+import java.util.StringTokenizer;
+
 public class Camera {
 
     public static final int KD_MAX_THREADS = 10;
@@ -34,8 +36,8 @@ public class Camera {
     public int W, H;
     public Color[][] data;
     public int dofSample;
-    public double shade_quality;
-    public double drefl_quality;
+    public int shade_quality;
+    public int drefl_quality;
     public int max_hitpoints;
     public int iterations;
     public double reduction;
@@ -107,11 +109,11 @@ public class Camera {
         data[i][j] = color;
     }
 
-    public double getShadeQuality() {
+    public int getShadeQuality() {
         return shade_quality;
     }
 
-    public double getDreflQuality() {
+    public int getDreflQuality() {
         return drefl_quality;
     }
 
@@ -151,6 +153,9 @@ public class Camera {
         data = new Color[H][];
         for (int i = 0; i < H; i++) {
             data[i] = new Color[W];
+            for (int j = 0; j < W; j++) {
+                data[i][j] = new Color();
+            }
         }
     }
 
@@ -170,12 +175,16 @@ public class Camera {
     }
 
     public void input(String var, String value) {
-        if (var.equals("algorithm="))
-            algorithm = value;
         if (var.equals("O="))
             O.input(value);
         if (var.equals("N="))
             N.input(value);
+        StringTokenizer tk = new StringTokenizer(value);
+        if (tk.hasMoreTokens()) {
+            value = tk.nextToken();
+        }
+        if (var.equals("algorithm="))
+            algorithm = value;
         if (var.equals("dofSample="))
             dofSample = Integer.parseInt(value);
         if (var.equals("aperture="))
@@ -191,9 +200,9 @@ public class Camera {
         if (var.equals("image_H="))
             H = Integer.parseInt(value);
         if (var.equals("shade_quality="))
-            shade_quality = Double.parseDouble(value);
+            shade_quality = Integer.parseInt(value);
         if (var.equals("drefl_quality="))
-            drefl_quality = Double.parseDouble(value);
+            drefl_quality = Integer.parseInt(value);
         if (var.equals("max_hitpoints="))
             max_hitpoints = Integer.parseInt(value);
         if (var.equals("iterations="))
@@ -211,7 +220,6 @@ public class Camera {
     }
 
     public void output(Bmp image) {
-        image = new Bmp(H, W);
         for (int y = 0; y < H; y++)
             for (int x = 0; x < W; x++)
                 image.setColor(x, y, data[y][x]);

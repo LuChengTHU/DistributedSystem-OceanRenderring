@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.StringTokenizer;
 
 import static renderer.utils.Vec3d.EPS;
 
@@ -20,6 +21,8 @@ public class Bmp {
     public Bmp(int H, int W) {
         ima = new BufferedImage(W, H, BufferedImage.TYPE_INT_RGB);
     }
+
+    public Bmp() {}
 
     public void set(BufferedImage _ima) {
         ima = _ima;
@@ -34,14 +37,18 @@ public class Bmp {
     }
 
     public Color getColor(int x, int y) {
-        return new Color(ima.getRGB(x, y));
+        return new Color(ima.getRGB(x, getH() - 1 - y));
     }
 
     public void setColor(int x, int y, Color c) {
-        ima.setRGB(x, y, c.getRGB());
+        ima.setRGB(x, getH() - 1 - y, c.getRGB());
     }
 
     public void input(String value) throws IOException {
+        StringTokenizer tk = new StringTokenizer(value);
+        if (tk.hasMoreTokens()) {
+            value = tk.nextToken();
+        }
         ima = ImageIO.read(new FileInputStream(value));
     }
 
@@ -82,13 +89,13 @@ public class Bmp {
         if (V2 == ima.getWidth())
             V2 = 0;
         Color ret = new Color();
-        Color tmp = new Color(ima.getRGB(V1, U1));
+        Color tmp = new Color(ima.getRGB(V1, getH() - 1 - U1));
         ret.addToThis(tmp.mulToThis(rat_U * rat_V));
-        tmp = new Color(ima.getRGB(V2, U1));
+        tmp = new Color(ima.getRGB(V2, getH() - 1 - U1));
         ret.addToThis(tmp.mulToThis(rat_U * (1 - rat_V)));
-        tmp = new Color(ima.getRGB(V1, U2));
+        tmp = new Color(ima.getRGB(V1, getH() - 1 - U2));
         ret.addToThis(tmp.mulToThis((1 - rat_U) * rat_V));
-        tmp = new Color(ima.getRGB(V2, U2));
+        tmp = new Color(ima.getRGB(V2, getH() - 1 - U2));
         ret.addToThis(tmp.mulToThis((1 - rat_U) * (1 - rat_V)));
         return ret;
     }
@@ -96,6 +103,6 @@ public class Bmp {
     public Color getUVColor(double u, double v) {
         int U = (int)(u * ima.getHeight());
         int V = (int)(v * ima.getWidth());
-        return new Color(ima.getRGB(V, U));
+        return new Color(ima.getRGB(V, getH() - 1 - U));
     }
 }

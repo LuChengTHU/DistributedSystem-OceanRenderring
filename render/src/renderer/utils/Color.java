@@ -127,4 +127,9 @@ public class Color {
     public boolean isZeroColor() {
         return Math.abs(r) < EPS && Math.abs(g) < EPS && Math.abs(b) < EPS;
     }
+
+    @Override
+    public String toString() {
+        return "(" + r + "," + g + "," + b + ")";
+    }
 }
