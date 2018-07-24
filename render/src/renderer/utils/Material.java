@@ -1,27 +1,17 @@
 package renderer.utils;
 
-import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import javax.imageio.IIOImage;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageWriteParam;
-import javax.imageio.ImageWriter;
-import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
-import javax.imageio.stream.FileImageOutputStream;
 
 import static renderer.utils.Vec3d.EPS;
 
 public class Material {
 
-    Color color, absor;
-    double refl, refr;
-    double diff, spec;
-    double rindex;
-    double drefl;
-    BufferedImage texture;
+    public Color color, absor;
+    public double refl, refr;
+    public double diff, spec;
+    public double rindex;
+    public double drefl;
+    public Bmp texture;
 
     public Material() {
         color = new Color(0, 0, 0);
@@ -30,6 +20,18 @@ public class Material {
         rindex = 0;
         drefl = 0;
         texture = null;
+    }
+
+    public Material(Material m) {
+        color = new Color(m.color);
+        absor = new Color(m.absor);
+        refl = m.refl;
+        refr = m.refr;
+        diff = m.diff;
+        spec = m.spec;
+        rindex = m.rindex;
+        drefl = m.drefl;
+        texture = m.texture;
     }
 
     public double BRDF(Vec3d ray_R, Vec3d N, Vec3d ray_I) {
@@ -58,9 +60,7 @@ public class Material {
         if (var.equals("spec=")) spec = Double.parseDouble(value);
         if (var.equals("drefl=")) drefl = Double.parseDouble(value);
         if (var.equals("rindex=")) rindex = Double.parseDouble(value);
-        if (var.equals("texture=")) {
-            texture = ImageIO.read(new FileInputStream(value));
-        }
+        if (var.equals("texture=")) texture.input(value);
     }
 
 }

@@ -1,5 +1,7 @@
 package renderer.utils;
 
+import java.util.StringTokenizer;
+
 public class Vec3d {
     public static double INF = 1e8;
     public static double EPS = 1e-8;
@@ -84,14 +86,16 @@ public class Vec3d {
         return ret;
     }
 
-    public Vec3d asRandomVector() {
+    public void asRandomVector() {
         do {
             x = 2 * Math.random() - 1;
             y = 2 * Math.random() - 1;
             z = 2 * Math.random() - 1;
         } while (x * x + y * y + z * z > 1 || x * x + y * y + z * z < EPS);
-        Vec3d ret = new Vec3d(normalize());
-        return ret;
+        Vec3d ret = normalize();
+        x = ret.x;
+        y = ret.y;
+        z = ret.z;
     }
 
     public Vec3d getAnVerticalVector() {
@@ -130,8 +134,7 @@ public class Vec3d {
     }
 
     public Vec3d cross(Vec3d v) {
-        Vec3d cro = new Vec3d(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x);
-        return cro.normalize();
+        return new Vec3d(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x);
     }
 
     public Vec3d mul(double d) {
@@ -239,6 +242,13 @@ public class Vec3d {
         if (cro.equals(zero))
             return true;
         return false;
+    }
+
+    public void input(String value) {
+        StringTokenizer tk = new StringTokenizer(value);
+        x = Double.parseDouble(tk.nextToken());
+        y = Double.parseDouble(tk.nextToken());
+        z = Double.parseDouble(tk.nextToken());
     }
 
     @Override

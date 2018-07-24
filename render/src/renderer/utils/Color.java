@@ -1,10 +1,9 @@
 package renderer.utils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.util.StringTokenizer;
 
 import static renderer.utils.Vec3d.EPS;
+
 
 public class Color {
 
@@ -20,24 +19,39 @@ public class Color {
         b = B;
     }
 
-    public Color add(Color A, Color B) {
-        return new Color(A.r + B.r, A.g + B.g, A.b + B.b);
+    public Color(int rgb) {
+        int R = (rgb >> 16) & 0xFF;
+        int G = (rgb >> 8) & 0xFF;
+        int B = rgb & 0xFF;
+        r = ((double)R) / 255.0;
+        g = ((double)G) / 255.0;
+        b = ((double)B) / 255.0;
     }
 
-    public Color sub(Color A, Color B) {
-        return new Color(A.r - B.r, A.g - B.g, A.b - B.b);
+    public Color(Color c) {
+        r = c.r;
+        g = c.g;
+        b = c.b;
     }
 
-    public Color mul(Color A, Color B) {
-        return new Color(A.r * B.r, A.g * B.g, A.b * B.b);
+    public Color add(Color A) {
+        return new Color(A.r + r, A.g + g, A.b + b);
     }
 
-    public Color mul(Color A, double k) {
-        return new Color(A.r * k, A.g * k, A.b * k);
+    public Color sub(Color A) {
+        return new Color(A.r - r, A.g - g, A.b - b);
     }
 
-    public Color div(Color A, double k) {
-        return new Color(A.r / k, A.g / k, A.b / k);
+    public Color mul(Color A) {
+        return new Color(A.r * r, A.g * g, A.b * b);
+    }
+
+    public Color mul(double k) {
+        return new Color(r * k, g * k, b * k);
+    }
+
+    public Color div(double k) {
+        return new Color(r / k, g / k, b / k);
     }
 
     public Color addToThis(Color A) {
@@ -90,6 +104,17 @@ public class Color {
     public double RGBMax() {
         if (r > g) return (r > b) ? r : b;
         return (g > b) ? g : b;
+    }
+
+    public int getRGB() {
+        int R = (int)(Math.min(1, r) * 255);
+        int G = (int)(Math.min(1, g) * 255);
+        int B = (int)(Math.min(1, b) * 255);
+        int value = (0xFF << 24) |
+                ((R & 0xFF) << 16) |
+                ((G & 0xFF) << 8)  |
+                ((B & 0xFF) << 0);
+        return value;
     }
 
     public void input(String value) {
