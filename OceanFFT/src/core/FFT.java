@@ -41,20 +41,20 @@ public class FFT {
         Complex a, b ;
         calculate(in, base, deep+1, flag) ;
         calculate(in, base+step, deep+1, flag) ;
-        System.out.printf("Calc: base = %d, deep = %d\n", base, deep);
+        //System.out.printf("Calc: base = %d, deep = %d\n", base, deep);
         for(i = ss = 0; i < half; i ++)
         {
             a = in.get(ss+base) ;
             b = in.get(ss+base+step) ;
-            System.out.printf("Calc: a = %s, b = %s, w = %s\n", a, b, w[i<<deep]);
+            //System.out.printf("Calc: a = %s, b = %s, w = %s\n", a, b, w[i<<deep]);
             if(flag == 0) b = b.mul(w[i<<deep]) ;
             //else b = b/w[i<<deep] ;
-            System.out.printf("CalcAfter: a = %s, b = %s\n", a, b);
+            //System.out.printf("CalcAfter: a = %s, b = %s\n", a, b);
             temp[i] = a.add(b) ;
             temp[i+half] = a.sub(b) ;
             ss += (step<<1) ;
         }
-        System.out.printf("\n");
+        //System.out.printf("\n");
         for(i = 0; i < num; i ++) {
             System.out.println(temp[i]);
             in.set((i << deep) + base, temp[i]);
@@ -64,7 +64,7 @@ public class FFT {
     public static void calcFFT(List<Complex> in)
     {
         int len = Integer.toBinaryString(in.size()).length()-1 ;
-        System.out.printf("Len: %d\n", len) ;
+        //System.out.printf("Len: %d\n", len) ;
         getInstance(len).calculate(in,0, 0, 0);
     }
 }

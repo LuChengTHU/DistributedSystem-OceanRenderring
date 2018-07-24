@@ -18,6 +18,12 @@ public class Complex {
         this.real = (float)real;
         this.im   = (float)im;
     }
+    public Complex(String str)
+    {
+        String[] strArr = str.replaceAll("[\\(\\)]", "").split(",") ;
+        this.real = Float.valueOf(strArr[0]);
+        this.im   = Float.valueOf(strArr[1]);
+    }
 
     public Complex add(Complex c)
     {

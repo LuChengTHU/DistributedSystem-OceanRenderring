@@ -1,5 +1,5 @@
 package mapreduce;
-/*
+
 import org.apache.hadoop.io.FloatWritable;
 import org.apache.hadoop.io.Writable;
 
@@ -33,4 +33,3 @@ public class ComplexWriteable implements Writable {
         im.readFields(dataInput);
     }
 }
-*/
