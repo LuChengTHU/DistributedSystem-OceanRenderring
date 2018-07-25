@@ -23,7 +23,6 @@ public class FFT {
         temp = new Complex[N] ;
         for(int i = 0; i < N; i ++) {
             w[i] = new Complex(Math.cos(2 * PI * i / N), Math.sin(2 * PI * i / N));
-            System.out.println(w[i]);
         }
     }
 
@@ -56,7 +55,7 @@ public class FFT {
         }
         //System.out.printf("\n");
         for(i = 0; i < num; i ++) {
-            System.out.println(temp[i]);
+            //System.out.println(temp[i]);
             in.set((i << deep) + base, temp[i]);
         }
     }

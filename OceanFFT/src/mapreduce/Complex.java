@@ -65,6 +65,8 @@ public class Complex {
         this.im = im;
     }
 
+    public float getNorm() {return (float)Math.sqrt(real*real+im*im) ;}
+
     @Override
     public String toString() {
         return String.format("(%f, %f)", real, im);
