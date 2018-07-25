@@ -36,7 +36,7 @@ public class Vec2 {
     public Vec2 normalize()
     {
         float length = length();
-
+        if (length < 0.0001) length = 0.0001f;
         X /= length;
         Y /= length;
 
