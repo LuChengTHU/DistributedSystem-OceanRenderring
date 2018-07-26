@@ -1,4 +1,4 @@
-package mapreduce;
+package core;
 
 public class Vec2 {
 

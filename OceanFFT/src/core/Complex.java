@@ -1,7 +1,4 @@
-package mapreduce;
-
-import java.io.OutputStream;
-import java.util.stream.Stream;
+package core;
 
 public class Complex {
 

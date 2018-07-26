@@ -1,5 +1,6 @@
 package mapreduce;
 
+import core.Complex;
 import org.apache.hadoop.io.FloatWritable;
 import org.apache.hadoop.io.Writable;
 

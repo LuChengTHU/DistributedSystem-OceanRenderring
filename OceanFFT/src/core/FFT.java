@@ -1,8 +1,6 @@
 package core;
-import mapreduce.Complex;
 
 import java.util.List;
-import java.util.Random;
 
 import java.lang.Math;
 public class FFT {
