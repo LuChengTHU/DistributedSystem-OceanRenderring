@@ -82,7 +82,7 @@ public class HGenerator {
                 Complex c0 = new Complex(real, im);
                 Complex c1 = new Complex(real, -im);
                 hkt.set(i*N+j, c0.mul(h0k.get(i*N+j)).add(c1.mul(h0minusk.get(i*N+j))));
-                System.out.println(c0.mul(h0k.get(i*N+j)).toString() + " " + c1.mul(h0minusk.get(i*N+j)).toString());
+                //System.out.println(c0.mul(h0k.get(i*N+j)).toString() + " " + c1.mul(h0minusk.get(i*N+j)).toString());
             }
         }
     }

@@ -19,7 +19,7 @@ public class OceanFFTMapper extends Mapper<Object, Text, Text, Text>
 
         FileSplit fileSplit = (FileSplit) context.getInputSplit() ;
         String fileName = fileSplit.getPath().getName() ;
-        Integer frameIndex = Integer.valueOf(fileName.substring(0, fileName.indexOf('.'))) ;
+        Integer frameIndex = Integer.valueOf(fileName.substring(fileName.indexOf('_') + 1, fileName.indexOf('.'))) ;
 
         String valStr = value.toString() ;
         String[] valArr = valStr.split("\t") ;

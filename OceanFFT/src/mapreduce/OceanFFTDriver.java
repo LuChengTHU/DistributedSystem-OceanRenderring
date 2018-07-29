@@ -19,8 +19,8 @@ public class OceanFFTDriver {
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Text.class);
 
-        TextInputFormat.addInputPath(job, new Path("OceanFFT/Hdata");
-        FileOutputFormat.setOutputPath(job, new Path("OceanFFT/output");
+        TextInputFormat.addInputPath(job, new Path("OceanFFT/Hdata"));
+        FileOutputFormat.setOutputPath(job, new Path("OceanFFT/output"));
 
         System.exit(job.waitForCompletion(true) ? 0 : 1);
     }
