@@ -15,7 +15,7 @@ public class OceanFFTDriver {
         Job job = Job.getInstance(conf, "OceanFFT");
         job.setJarByClass(OceanFFTDriver.class);
         job.setMapperClass(OceanFFTMapper.class);
-        job.setReducerClass(OceanFFTReducer.class);
+        //job.setReducerClass(OceanFFTReducer.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Text.class);
 

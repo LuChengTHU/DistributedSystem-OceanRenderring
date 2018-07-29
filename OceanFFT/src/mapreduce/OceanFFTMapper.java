@@ -23,7 +23,11 @@ public class OceanFFTMapper extends Mapper<Object, Text, Text, Text>
 
         String valStr = value.toString() ;
         String[] valArr = valStr.split("\t") ;
+        //System.out.println("#"+valArr[0]+"#");
         Integer rowId = Integer.valueOf(valArr[0]) ;
+        //context.write(new Text("Test"), new Text(valArr[0]+"#"+valArr[1])) ;
+
+
         String[] dataArr = valArr[1].split(" ") ;
 
         ArrayList<Complex> in = new ArrayList<Complex>();
@@ -38,5 +42,6 @@ public class OceanFFTMapper extends Mapper<Object, Text, Text, Text>
             dataText.set(in.get(i).toString()) ;
             context.write(keyText, dataText) ;
         }
+
     }
 }

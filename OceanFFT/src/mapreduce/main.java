@@ -8,6 +8,8 @@ import org.apache.hadoop.fs.Path;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 
 public class main {
 
@@ -23,10 +25,10 @@ public class main {
         for (int t = 0; t < T; t++) {
             H hkt = new H(N);
             hGenerator.generateHkt(h0k, h0minusk, t, hkt);
-            FSDataOutputStream out = fs.create(new Path("OceanFFT/Hdata/" + "frame_"+ t + ".txt"));
+            OutputStream out = fs.create(new Path("OceanFFT/Hdata/" + "frame_"+ (t + 1) + ".txt"));
             StringBuffer buffer = new StringBuffer();
             for (int i = 0; i < N; i++) {
-                buffer.append(i);
+                buffer.append(String.valueOf(i));
                 buffer.append("\t");
                 for (int j = 0; j < N; j++) {
                     if (j > 0)
@@ -37,16 +39,16 @@ public class main {
                 buffer.append("\n");
                 //System.out.println(buffer.toString());
             }
-            out.writeChars(buffer.toString());
+            out.write(buffer.toString().getBytes());
             out.close();
         }
     }
 
     public static void main(String[] args) throws Exception {
-        Integer rowId = Integer.valueOf("0") ;
-        System.out.println(rowId);
-        //generateInitialData();
-        //OceanFFTDriver.run();
+        //Integer rowId = Integer.valueOf("0") ;
+        //System.out.println(rowId);
+        generateInitialData();
+        OceanFFTDriver.run();
     }
 
 }
