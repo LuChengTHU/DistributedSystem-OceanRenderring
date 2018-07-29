@@ -130,7 +130,7 @@ public class RayTracer {
             Primitive nearest_primitive = collider.getPrimitive();
             if (hash != null) hash.set((hash.get() + nearest_primitive.getSample()) % HASH_MOD);
             if (nearest_primitive.getMaterial().diff > EPS) ret.addToThis(calnDiffusion(collider, hash, rc, weight));
-            if (camera.getAlgorithm() != "RC") {
+            if (!camera.getAlgorithm().equals("RC")) {
                 if (nearest_primitive.getMaterial().refl > EPS) ret.addToThis(calnReflection(collider, ray_V, dep, refracted, hash, rc, weight));
                 if (nearest_primitive.getMaterial().refr > EPS) ret.addToThis(calnRefraction(collider, ray_V, dep, refracted, hash, rc, weight));
             }
