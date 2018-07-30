@@ -1,16 +1,13 @@
-package core;
+package oceanFFT;
 
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileSystem;
+import core.Complex;
+import core.Vec2;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Random;
 
 public class HGenerator {
     public int N = 256; // grad size
-    public int L = 500;
+    public int L = 350;
     public float g = 9.81f;
     public int T = 100; // num of frames
     public float A = 0.0000038f;
@@ -59,8 +56,10 @@ public class HGenerator {
         float log_2 = (float) Math.sqrt(2);
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                int n = -N / 2 + i;
-                int m = -N / 2 + j;
+                int n = -N/2+i;
+                int m = -N/2+j;
+                if(n > N/2) n -= N ;
+                if(m > N/2) m -= N ;
                 Vec2 k = new Vec2(2 * PI * n / L, 2 * PI * m / L);
                 Vec2 minusk = new Vec2(-2 * PI * n / L, -2 * PI * m / L);
                 float epsilon1 = (float) random.nextGaussian(), epsilon2 = (float) random.nextGaussian();
@@ -71,18 +70,21 @@ public class HGenerator {
         }
     }
 
-    public void generateHkt(H h0k, H h0minusk, int t, H hkt) {
+    public void generateHkt(H h0k, H h0minusk, float t, H hkt) {
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                int n = -N / 2 + i;
-                int m = -N / 2 + j;
+                int n = -N/2+i;
+                int m = -N/2+j;
+                if(n > N/2) n -= N ;
+                if(m > N/2) m -= N ;
+
                 Vec2 k = new Vec2(2*PI*n/L, 2*PI*m/L);
                 float omega_t = dispersion(k) * t;
                 float real = (float)Math.cos(omega_t);
                 float im = (float)Math.sin(omega_t);
                 Complex c0 = new Complex(real, im);
                 Complex c1 = new Complex(real, -im);
-                hkt.set(i*N+j, c0.mul(h0k.get(i*N+j)).add(c1.mul(h0minusk.get(i*N+j))));
+                hkt.set(i*N+j, c0.mul(h0k.get(i*N+j)).add(c1.mul(h0k.get((N-i)%N*N+(N-j)%N).conj())));
                 //System.out.println(c0.mul(h0k.get(i*N+j)).toString() + " " + c1.mul(h0minusk.get(i*N+j)).toString());
             }
         }
@@ -112,7 +114,7 @@ public class HGenerator {
                 h[j*N+i] = in.get(j).mul((float)(1/2048.0)) ;
         }
         System.out.println("Demo: FFT finished...\n") ;
-        FileWriter out = new FileWriter("OceanFFT/Hdata/" + "demo" + ".txt");
+        FileWriter out = new FileWriter("oceanFFT/Hdata/" + "demo" + ".txt");
         for(int i = 0; i < N; i ++)
         {
             for(int j = 0; j < N; j ++)

@@ -28,6 +28,7 @@ hs_err_pid*
 .idea
 *.iml
 
-OceanFFT/Hdata/*
-OceanFFT/output/*
+frontend/Hdata/*
+frontend/OceanHeight/*
+frontend/ModelData/*
 demoImg/*

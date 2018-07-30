@@ -1,4 +1,6 @@
-package core;
+package oceanFFT;
+
+import core.Complex;
 
 public class H {
     private int N;

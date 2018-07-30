@@ -1,4 +1,4 @@
-package mapreduce;
+package oceanFFT;
 
 import core.Complex;
 import core.FFT;
@@ -41,7 +41,7 @@ public class OceanFFTMapper extends Mapper<Object, Text, Text, Text>
         for(int i = 0; i < in.size(); i ++)
         {
             keyText.set(frameIndex.toString()+' '+new Integer(i).toString()) ;
-            dataText.set(in.get(i).toString()) ;
+            dataText.set(rowId.toString()+' '+in.get(i).toString()) ;
             context.write(keyText, dataText) ;
         }
 

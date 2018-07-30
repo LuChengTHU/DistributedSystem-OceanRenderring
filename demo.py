@@ -8,7 +8,7 @@ from mpl_toolkits.mplot3d import Axes3D
 fig = plt.figure()
 
 
-frameCount = 20
+frameCount = 50
 res = 256
 step = 1024*2/res
 
@@ -19,7 +19,7 @@ X, Y = np.meshgrid(X, Y)
 redCount = 0 
 Z = np.zeros((frameCount, res, res), dtype=np.float32)
 while True:
-	partName = "OceanFFT/output/part-r-%05d"%redCount
+	partName = "oceanFFT/output/part-r-%05d"%redCount
 	print(partName)
 	try:
 		partFile = open(partName, "r")
@@ -45,7 +45,7 @@ if not os.path.exists("demoImg"):
 for i in range(frameCount):
 	ax = fig.add_subplot(111, projection='3d')
 	ax.plot_surface(X, Y, Z[i], cmap=plt.get_cmap('coolwarm'))
-	ax.set_zlim(0, 500)
+	ax.set_zlim(0, 1000)
 	#plt.show()
 	fig.set_size_inches(24, 13.5)
 	plt.savefig("demoImg/%05d.png"%i)

@@ -1,8 +1,10 @@
-package mapreduce;
+package main;
 
-import core.*;
+import oceanFFT.H;
+import oceanFFT.HGenerator;
+import oceanFFT.OceanFFTDriver;
+import physicsEngine.EngineDriver;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 
@@ -10,7 +12,7 @@ import java.io.*;
 
 public class main {
 
-    public static int T = 20;
+    public static int T = 10;
 
     private static void generateInitialData() throws IOException {
         HGenerator hGenerator = HGenerator.getInstance();
@@ -21,8 +23,8 @@ public class main {
         FileSystem fs = FileSystem.get(conf);
         for (int t = 0; t < T; t++) {
             H hkt = new H(N);
-            hGenerator.generateHkt(h0k, h0minusk, t, hkt);
-            OutputStream out = fs.create(new Path("OceanFFT/Hdata/" + "frame_"+ (t + 1) + ".txt"));
+            hGenerator.generateHkt(h0k, h0minusk, t/3.0f, hkt);
+            OutputStream out = fs.create(new Path("frontend/Hdata/" + "frame_"+ (t + 1) + ".txt"));
             StringBuffer buffer = new StringBuffer();
             for (int i = 0; i < N; i++) {
                 buffer.append(String.valueOf(i));
@@ -38,15 +40,32 @@ public class main {
             }
             out.write(buffer.toString().getBytes());
             out.close();
+
+            if(t == 0)
+                for(int i = 0; i < N; i ++)
+                    System.out.println(hkt.get(i)) ;
         }
+
     }
 
     public static void main(String[] args) throws Exception {
         //Integer rowId = Integer.valueOf("0") ;
         //System.out.println(rowId);
-        Runtime.getRuntime().exec("rm -r -f OceanFFT/output") ;
+        Runtime.getRuntime().exec("rm -r -f frontend/OceanHeight") ;
+        Runtime.getRuntime().exec("rm -r -f frontend/Hdata") ;
         generateInitialData();
         OceanFFTDriver.run();
+
+
+
+        //for(int iter = 0; iter < T; iter ++)
+        //    EngineDriver.run(iter+1);
+        /*ArrayList<Complex> in = new ArrayList<Complex>() ;
+        for (int i = 0; i < (1<<3); i ++)
+            in.add(new Complex(i+1, (i+1)*2)) ;
+        FFT.calcFFT(in);
+        for(int i = 0; i < (1<<3); i ++)
+            System.out.println(in.get(i));*/
     }
 
 }
