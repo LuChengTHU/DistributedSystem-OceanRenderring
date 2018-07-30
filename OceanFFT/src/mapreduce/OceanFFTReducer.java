@@ -22,7 +22,7 @@ public class OceanFFTReducer extends Reducer<Text,Text,Text,Text> {
 
         StringBuffer sBuf = new StringBuffer() ;
         for(Complex comp : in)
-            sBuf.append(comp.toString()+" ") ;
+            sBuf.append(Float.valueOf(comp.getNorm()).toString()+" ") ;
         result.set(sBuf.toString()) ;
         context.write(key, result);
     }

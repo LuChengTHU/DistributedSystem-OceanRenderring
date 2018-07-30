@@ -15,9 +15,11 @@ public class OceanFFTDriver {
         Job job = Job.getInstance(conf, "OceanFFT");
         job.setJarByClass(OceanFFTDriver.class);
         job.setMapperClass(OceanFFTMapper.class);
-        //job.setReducerClass(OceanFFTReducer.class);
+        job.setReducerClass(OceanFFTReducer.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Text.class);
+
+        System.out.println("Job driver running\n") ;
 
         TextInputFormat.addInputPath(job, new Path("OceanFFT/Hdata"));
         FileOutputFormat.setOutputPath(job, new Path("OceanFFT/output"));

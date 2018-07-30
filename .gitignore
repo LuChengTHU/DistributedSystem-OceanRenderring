@@ -29,3 +29,5 @@ hs_err_pid*
 *.iml
 
 OceanFFT/Hdata/*
+OceanFFT/output/*
+demoImg/*

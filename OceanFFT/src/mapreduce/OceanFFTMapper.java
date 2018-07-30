@@ -17,6 +17,7 @@ public class OceanFFTMapper extends Mapper<Object, Text, Text, Text>
     public void map(Object key, Text value, Context context
     ) throws IOException, InterruptedException {
 
+
         FileSplit fileSplit = (FileSplit) context.getInputSplit() ;
         String fileName = fileSplit.getPath().getName() ;
         Integer frameIndex = Integer.valueOf(fileName.substring(fileName.indexOf('_') + 1, fileName.indexOf('.'))) ;
@@ -27,14 +28,15 @@ public class OceanFFTMapper extends Mapper<Object, Text, Text, Text>
         Integer rowId = Integer.valueOf(valArr[0]) ;
         //context.write(new Text("Test"), new Text(valArr[0]+"#"+valArr[1])) ;
 
-
         String[] dataArr = valArr[1].split(" ") ;
 
         ArrayList<Complex> in = new ArrayList<Complex>();
-        for(String data : dataArr)
-            in.add(new Complex(data)) ;
+        for(String data : dataArr) {
+            in.add(new Complex(data));
+        }
 
         FFT.calcFFT(in);
+
 
         for(int i = 0; i < in.size(); i ++)
         {

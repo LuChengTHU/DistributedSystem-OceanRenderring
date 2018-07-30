@@ -6,14 +6,11 @@ import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
+import java.io.*;
 
 public class main {
 
-    public static int T = 10;
+    public static int T = 20;
 
     private static void generateInitialData() throws IOException {
         HGenerator hGenerator = HGenerator.getInstance();
@@ -47,6 +44,7 @@ public class main {
     public static void main(String[] args) throws Exception {
         //Integer rowId = Integer.valueOf("0") ;
         //System.out.println(rowId);
+        Runtime.getRuntime().exec("rm -r -f OceanFFT/output") ;
         generateInitialData();
         OceanFFTDriver.run();
     }

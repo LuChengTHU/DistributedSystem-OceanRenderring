@@ -66,6 +66,6 @@ public class Complex {
 
     @Override
     public String toString() {
-        return String.format("(%f, %f)", real, im);
+        return String.format("(%f,%f)", real, im);
     }
 }

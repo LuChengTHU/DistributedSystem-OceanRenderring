@@ -9,13 +9,14 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class HGenerator {
-    public int N = 1024; // grad size
+    public int N = 256; // grad size
     public int L = 500;
     public float g = 9.81f;
     public int T = 100; // num of frames
-    public float A = 0.2f;
+    public float A = 0.0000038f;
     public float PI = 3.1415926535897932384626433832795f;
-    public float wSpeed = 5000f;
+    public float wSpeed = 50f;
+    public float minWaveSize = 0.1f ;
     public Vec2 wDirection = new Vec2(1.0f, 0); // wind (1, 0)
     public Random random = new Random();
 
@@ -44,7 +45,7 @@ public class HGenerator {
         float kw = k.normalize().dot(wDirection.normalize());
         float kw2 = kw * kw;
         // Ph(k)
-        float Phk = A / mag4 * (float)Math.exp(-1.0/(mag2 * L2)) * kw2;
+        float Phk = A / mag4 * (float)Math.exp(-1.0/(mag2 * L2)) * (float)Math.exp(-mag2*Math.pow(minWaveSize, 2)) * kw2;
         float PhkSqrt = (float)Math.sqrt(Phk);
         return PhkSqrt;
     }
