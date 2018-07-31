@@ -1,15 +1,20 @@
 package renderer.utils;
 
-import javax.imageio.IIOImage;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageWriteParam;
-import javax.imageio.ImageWriter;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import renderer.tracer.RayTracerDriver;
+
+import javax.imageio.*;
 import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
 import javax.imageio.stream.FileImageOutputStream;
+import javax.imageio.stream.ImageInputStream;
+import javax.imageio.stream.ImageOutputStream;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.StringTokenizer;
 
 import static renderer.utils.Vec3d.EPS;
@@ -44,12 +49,21 @@ public class Bmp {
         ima.setRGB(x, getH() - 1 - y, c.getRGB());
     }
 
+
+    // FIXME: use HDFS??
     public void input(String value) throws IOException {
         StringTokenizer tk = new StringTokenizer(value);
         if (tk.hasMoreTokens()) {
             value = tk.nextToken();
         }
-        ima = ImageIO.read(new FileInputStream(value));
+        if (RayTracerDriver.rtEnv == FileLoader.ENV.NATIVE) {
+            ima = ImageIO.read(new FileInputStream(value));
+        } else {
+            Configuration conf = new Configuration();
+            FileSystem fs = FileSystem.get(conf);
+            Path path = new Path(value);
+            ima = ImageIO.read(fs.open(path));
+        }
     }
 
     public void output(String filename) {
@@ -60,14 +74,24 @@ public class Bmp {
         try {
             ImageWriter writer = ImageIO.getImageWritersByFormatName("jpg").next();
             // specifies where the jpg image has to be written
-            FileImageOutputStream fios = new FileImageOutputStream(new File(filename));
-            writer.setOutput(fios);
-
-            // writes the file with given compression level
-            // from your JPEGImageWriteParam instance
-            writer.write(null, new IIOImage(ima, null, null), jpegParams);
-            writer.reset();
-            fios.close();
+            if (RayTracerDriver.rtEnv == FileLoader.ENV.NATIVE) {
+                FileImageOutputStream fios = new FileImageOutputStream(new File(filename));
+                writer.setOutput(fios);
+                // writes the file with given compression level
+                // from your JPEGImageWriteParam instance
+                writer.write(null, new IIOImage(ima, null, null), jpegParams);
+                writer.reset();
+                fios.flush();
+                fios.close();
+            } else {
+                OutputStream fios = FileSystem.get(new Configuration()).create(new Path(filename), true);
+                ImageOutputStream stream = ImageIO.createImageOutputStream(fios);
+                writer.setOutput(stream);
+                writer.write(null, new IIOImage(ima, null, null), jpegParams);
+                writer.reset();
+                fios.flush();
+                fios.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

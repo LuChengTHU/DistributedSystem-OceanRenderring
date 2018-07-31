@@ -5,6 +5,7 @@ import renderer.objects.Plane;
 import renderer.objects.Primitive;
 import renderer.objects.Sphere;
 import renderer.utils.Color;
+import renderer.utils.FileLoader;
 import renderer.utils.Vec3d;
 
 import java.io.BufferedReader;
@@ -59,50 +60,9 @@ public class Scene {
         }
     }
 
-    public void createScene(String filename) throws IOException{
-        if (filename.equals("")) return;
-        BufferedReader br = new BufferedReader(new FileReader(filename));
-        String str = null;
-        while ((str = br.readLine()) != null) {
-            Primitive new_primitive = null;
-            Light new_light = null;
-            StringTokenizer tk = new StringTokenizer(str);
-            String var = "";
-            if (tk.hasMoreTokens()) {
-                var = tk.nextToken();
-            }
-            if (var.equals("primitive")) {
-                String type = tk.nextToken();
-                if (type.equals("sphere")) new_primitive = new Sphere();
-                if (type.equals("plane")) new_primitive = new Plane();
-                addPrimitive(new_primitive);
-            } else if (var.equals("light")) {
-                String type = tk.nextToken();
-                if (type.equals("area")) new_light = new AreaLight();
-                addLight(new_light);
-            } else if (!var.equals("background") && !var.equals("camera")) {
-                continue;
-            }
-
-            String order = null;
-            while ((order = br.readLine()) != null) {
-                StringTokenizer stk = new StringTokenizer(order);
-                String innerVar = stk.nextToken();
-                int innerIndex = order.indexOf(innerVar) + innerVar.length();
-                String innerValue = order.substring(innerIndex);
-                if (innerVar.equals("end")) {
-                    if (var.equals("primitive") && new_primitive != null)
-                        new_primitive.preTreatment();
-                    break;
-                }
-
-                if (var.equals("background")) backgroundInput(innerVar, innerValue);
-                if (var.equals("primitive") && new_primitive != null) new_primitive.input(innerVar, innerValue);
-                if (var.equals("light") && new_light != null) new_light.input(innerVar, innerValue);
-                if (var.equals("camera")) camera.input(innerVar, innerValue);
-            }
-        }
-
+    public void createScene(String filename, FileLoader.ENV env) throws IOException{
+        FileLoader fl = new FileLoader(filename, env);
+        fl.parseScene(this);
         camera.initialize();
     }
 

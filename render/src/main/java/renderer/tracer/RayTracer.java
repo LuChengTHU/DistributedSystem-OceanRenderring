@@ -41,7 +41,7 @@ public class RayTracer {
         outputName = filename;
     }
 
-    public Color calnDiffusion(Collider collider, IntPtr hash, int rc, Color weight) {
+    public Color calnDiffusion(Collider collider, IntPtr hash) {
         Primitive pri = collider.getPrimitive();
         Color color = new Color(pri.getMaterial().color);
         if (pri.getMaterial().texture != null) {
@@ -60,13 +60,13 @@ public class RayTracer {
         return ret;
     }
 
-    public Color calnReflection(Collider collider, Vec3d ray_V, int dep, boolean refracted , IntPtr hash, int rc, Color weight) {
+    public Color calnReflection(Collider collider, Vec3d ray_V, int dep, boolean refracted , IntPtr hash) {
         Primitive pri = collider.getPrimitive();
         ray_V = ray_V.reflect(collider.N);
 
         if (pri.getMaterial().drefl < EPS || dep > MAX_DREFL_DEP) {
             Color alpha = pri.getMaterial().color.mul(pri.getMaterial().refl);
-            return rayTracing(collider.C, ray_V, dep + 1, refracted, hash, rc, weight.mul(alpha)).mul(alpha);
+            return rayTracing(collider.C, ray_V, dep + 1, refracted, hash).mul(alpha);
         }
 
         Vec3d Dx = ray_V.getAnVerticalVector();
@@ -87,12 +87,12 @@ public class RayTracer {
             x *= pri.getMaterial().drefl;
             y *= pri.getMaterial().drefl;
 
-            rcol.addToThis(rayTracing(collider.C, ray_V.add(Dx.mul(x)).add(Dy.mul(y)), dep + MAX_DREFL_DEP, refracted, null, rc, weight.mul(alpha)));
+            rcol.addToThis(rayTracing(collider.C, ray_V.add(Dx.mul(x)).add(Dy.mul(y)), dep + MAX_DREFL_DEP, refracted, null));
         }
         return rcol.mul(alpha);
     }
 
-    public Color calnRefraction(Collider collider, Vec3d ray_V, int dep, boolean refracted, IntPtr hash, int rc, Color weight) {
+    public Color calnRefraction(Collider collider, Vec3d ray_V, int dep, boolean refracted, IntPtr hash) {
         Primitive pri = collider.getPrimitive();
         double n = pri.getMaterial().rindex;
         if (!refracted) n = 1.0 / n;
@@ -105,12 +105,12 @@ public class RayTracer {
         if (refracted) {
             alpha.mulToThis((pri.getMaterial().absor.mul(-collider.dist)).exp());
         }
-        Color rcol = rayTracing(collider.C, ray_V, dep + 1, nextRefracted.get(), hash, rc, weight.mul(alpha));
+        Color rcol = rayTracing(collider.C, ray_V, dep + 1, nextRefracted.get(), hash);
         return rcol.mul(alpha);
     }
 
 
-    public Color rayTracing(Vec3d ray_O , Vec3d ray_V , int dep , boolean refracted , IntPtr hash, int rc, Color weight) {
+    public Color rayTracing(Vec3d ray_O , Vec3d ray_V , int dep , boolean refracted , IntPtr hash) {
         if (dep > MAX_RAYTRACING_DEP) return new Color();
         if (hash != null) hash.set((hash.get() * HASH_FAC) % HASH_MOD);
 
@@ -129,10 +129,10 @@ public class RayTracer {
         if (collider != null) {
             Primitive nearest_primitive = collider.getPrimitive();
             if (hash != null) hash.set((hash.get() + nearest_primitive.getSample()) % HASH_MOD);
-            if (nearest_primitive.getMaterial().diff > EPS) ret.addToThis(calnDiffusion(collider, hash, rc, weight));
+            if (nearest_primitive.getMaterial().diff > EPS) ret.addToThis(calnDiffusion(collider, hash));
             if (!camera.getAlgorithm().equals("RC")) {
-                if (nearest_primitive.getMaterial().refl > EPS) ret.addToThis(calnReflection(collider, ray_V, dep, refracted, hash, rc, weight));
-                if (nearest_primitive.getMaterial().refr > EPS) ret.addToThis(calnRefraction(collider, ray_V, dep, refracted, hash, rc, weight));
+                if (nearest_primitive.getMaterial().refl > EPS) ret.addToThis(calnReflection(collider, ray_V, dep, refracted, hash));
+                if (nearest_primitive.getMaterial().refr > EPS) ret.addToThis(calnRefraction(collider, ray_V, dep, refracted, hash));
             }
         }
 
@@ -152,7 +152,7 @@ public class RayTracer {
                     Vec3d ray_V = camera.emit(i, j);
                     sample[i][j].set(0);
                     Color color = camera.getColor(i, j);
-                    color.addToThis(rayTracing(ray_O, ray_V, 1, false, sample[i][j], i * W + j, new Color(1.0, 1.0, 1.0)));
+                    color.addToThis(rayTracing(ray_O, ray_V, 1, false, sample[i][j]));
                     camera.setColor(i, j, color.confine());
                 } else {
                     int dofSample = camera.getDofSample();
@@ -162,7 +162,7 @@ public class RayTracer {
                         Vec3d dof_O = new Vec3d();
                         Vec3d dof_V = new Vec3d();
                         camera.dofEmit(i, j, dof_O, dof_V);
-                        color.addToThis(rayTracing(dof_O, dof_V, 1, false, null, i * W + j, new Color(1.0, 1.0, 1.0).divToThis(dofSample)).divToThis(dofSample));
+                        color.addToThis(rayTracing(dof_O, dof_V, 1, false, null).divToThis(dofSample));
                     }
                     camera.setColor(i, j, color.confine());
                 }
@@ -193,11 +193,14 @@ public class RayTracer {
                         for (int c = -1; c <= 1; c++) {
                             if (((r + c) & 1) == 0) continue;
                             Vec3d ray_V = camera.emit( i + ( double ) r / 3.0 , j + ( double ) c / 3.0 );
-                            color.addToThis(rayTracing(ray_O, ray_V, 1, false, null, i * W + j, new Color(1, 1, 1).divToThis(5.0)).divToThis(5));
+                            color.addToThis(rayTracing(ray_O, ray_V, 1, false, null).divToThis(5));
                         }
                     camera.setColor(i, j, color.confine());
                 }
 
+                if (j == W - 1) {
+                    System.out.println("ReSampling=" + i + "/" + H + "\n");
+                }
             }
         }
     }
@@ -217,7 +220,7 @@ public class RayTracer {
     }
 
     public void run() throws IOException {
-        scene.createScene(inputName);
+        scene.createScene(inputName, FileLoader.ENV.NATIVE);
         camera = scene.getCamera();
 
         H = camera.getH();

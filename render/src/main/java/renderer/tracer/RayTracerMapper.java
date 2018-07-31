@@ -1,31 +1,30 @@
 package renderer.tracer;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.fs.FSDataInputStream;
-import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.io.IOUtils;
-import org.apache.hadoop.io.LongWritable;
-import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
-import org.apache.hadoop.mapreduce.Reducer;
-import org.apache.hadoop.mapreduce.InputSplit;
-import org.apache.hadoop.mapreduce.JobContext;
-import org.apache.hadoop.mapreduce.RecordReader;
-import org.apache.hadoop.mapreduce.TaskAttemptContext;
-import org.apache.hadoop.mapreduce.lib.input.FileSplit;
-import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import renderer.utils.FileLoader;
+
+import java.io.IOException;
 
 
 public class RayTracerMapper
     extends Mapper<Object, Text, Text, Text> {
 
-    RayTracer rayTracer = new RayTracer();
+    RayTracerRunner rt = new RayTracerRunner();
 
-//        rayTracer.setInput(new String("scene.txt"));
-//        rayTracer.setOutput(new String("pic.jpg"));
+    @Override
+    protected void setup(Context context) throws IOException, InterruptedException {
+        Configuration conf = context.getConfiguration();
+        rt.setup(conf.get("scenePath"), FileLoader.ENV.valueOf(conf.get("ENV")));
+    }
 
-
+    @Override
+    public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
+        int i = Integer.parseInt(value.toString().split(",")[0]);
+        int j = Integer.parseInt(value.toString().split(",")[1]);
+        rt.sampling(i, j);
+        context.write(new Text("FINAL"),
+                new Text(i + "," + j + "\t" + rt.getSample() + ";" + rt.getPixelColor()));
+    }
 }
