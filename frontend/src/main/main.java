@@ -22,8 +22,8 @@ public class main {
         System.out.println("Start FFT");
         //OceanFFTDriver.run();
         System.out.println("Start convert to obj");
-        Utils.gridHeightToObj();
-
+        //Utils.gridHeightToObj();
+        Utils.gridHeightToObj();;
         //for(int iter = 0; iter < T; iter ++)
         //    EngineDriver.run(iter+1);
         /*ArrayList<Complex> in = new ArrayList<Complex>() ;
