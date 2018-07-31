@@ -2,14 +2,20 @@ package oceanFFT;
 
 import core.Complex;
 import core.Vec2;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Random;
 
 public class HGenerator {
     public int N = 256; // grad size
+    public int T = 10;
+
     public int L = 350;
     public float g = 9.81f;
-    public int T = 100; // num of frames
     public float A = 0.0000038f;
     public float PI = 3.1415926535897932384626433832795f;
     public float wSpeed = 50f;
@@ -89,40 +95,37 @@ public class HGenerator {
             }
         }
     }
-    /*
-    public static void demoFFT(Complex[] h, Complex[] hmin) throws IOException
-    {
-        System.out.println("Demo: Generating demo...\n") ;
-        ArrayList<Complex> in ;
-        for(int i = 0; i < N; i ++)
-        {
-            in = new ArrayList<Complex>() ;
-            for(int j = 0; j < N; j ++)
-                in.add(h[i*N+j].add(hmin[i*N+j]));
-            FFT.calcFFT(in);
-            for(int j = 0; j < N; j ++)
-                h[i*N+j] = in.get(j) ;
+
+
+    public void generateInitialData() throws IOException {
+        H h0k = new H(N), h0minusk = new H(N);
+        generateH0k(h0k, h0minusk);
+        Configuration conf = new Configuration();
+        FileSystem fs = FileSystem.get(conf);
+        for (int t = 0; t < T; t++) {
+            H hkt = new H(N);
+            generateHkt(h0k, h0minusk, t / 3.0f, hkt);
+
+            OutputStream out = fs.create(new Path("frontend/Hdata/" + "frame_" + t + ".txt"));
+            StringBuffer buffer = new StringBuffer();
+            for (int i = 0; i < N; i++) {
+                buffer.append(String.valueOf(i));
+                buffer.append("\t");
+                for (int j = 0; j < N; j++) {
+                    if (j > 0)
+                        buffer.append(" ");
+                    buffer.append(hkt.get(i * N + j).toString());
+                    //System.out.println("i="+i+" j="+j+":"+hkt[i*N+j].getReal() + " i"+hkt[i*N+j].getIm());
+                }
+                buffer.append("\n");
+                //System.out.println(buffer.toString());
+            }
+            out.write(buffer.toString().getBytes());
+            out.close();
+
+            if (t == 0)
+                for (int i = 0; i < N; i++)
+                    System.out.println(hkt.get(i));
         }
-        for(int i = 0; i < N; i ++)
-        {
-            in = new ArrayList<Complex>() ;
-            for(int j = 0; j < N; j ++)
-                in.add(h[j*N+i]) ;
-            FFT.calcFFT(in);
-            System.out.println(in.get(0));
-            for(int j = 0; j < N; j ++)
-                h[j*N+i] = in.get(j).mul((float)(1/2048.0)) ;
-        }
-        System.out.println("Demo: FFT finished...\n") ;
-        FileWriter out = new FileWriter("oceanFFT/Hdata/" + "demo" + ".txt");
-        for(int i = 0; i < N; i ++)
-        {
-            for(int j = 0; j < N; j ++)
-                out.write(Float.valueOf(h[i*N+j].getNorm()).toString()+" ");
-            out.write("\n");
-        }
-        out.flush();
-        System.out.println("Demo: Output finished...\n") ;
     }
-    */
 }
