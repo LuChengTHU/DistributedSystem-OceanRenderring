@@ -37,6 +37,8 @@ public class Vec3 {
         return X * r.getX() + Y * r.getY() + Z * r.getZ() ;
     }
 
+    public Vec2 toVec2() {return new Vec2(X, Y) ;}
+
     public Vec3 normalize()
     {
         float length = length();

@@ -1,21 +1,21 @@
 package oceanFFT;
 
 import core.Complex;
+import core.Conf;
 import core.Vec2;
 
 import java.util.Random;
 
 public class HGenerator {
-    public int N = 256; // grad size
-    public int L = 350;
-    public float g = 9.81f;
-    public int T = 100; // num of frames
-    public float A = 0.0000038f;
-    public float PI = 3.1415926535897932384626433832795f;
-    public float wSpeed = 50f;
-    public float minWaveSize = 0.1f ;
-    public Vec2 wDirection = new Vec2(1.0f, 0); // wind (1, 0)
-    public Random random = new Random();
+    public static final int N = Conf.resolution; // grad size
+    public static final int L = Conf.L;
+    public static final float g = Conf.g;
+    public static final float A = Conf.A;
+    public static final float PI = 3.1415926535897932384626433832795f;
+    public static final float wSpeed = Conf.wSpeed;
+    public static final float minWaveSize = Conf.minWaveSize ;
+    public static final Vec2 wDirection = Conf.wDirection; // wind (1, 0)
+    public static final Random random = new Random();
 
     private static HGenerator hGenerator = new HGenerator();
 

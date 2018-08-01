@@ -1,5 +1,6 @@
 package main;
 
+import core.Conf;
 import oceanFFT.H;
 import oceanFFT.HGenerator;
 import oceanFFT.OceanFFTDriver;
@@ -12,8 +13,6 @@ import java.io.*;
 
 public class main {
 
-    public static int T = 10;
-
     private static void generateInitialData() throws IOException {
         HGenerator hGenerator = HGenerator.getInstance();
         int N = hGenerator.N;
@@ -21,9 +20,9 @@ public class main {
         hGenerator.generateH0k(h0k, h0minusk);
         Configuration conf = new Configuration();
         FileSystem fs = FileSystem.get(conf);
-        for (int t = 0; t < T; t++) {
+        for (int t = 0; t < Conf.totalFrame; t++) {
             H hkt = new H(N);
-            hGenerator.generateHkt(h0k, h0minusk, t/3.0f, hkt);
+            hGenerator.generateHkt(h0k, h0minusk, t* Conf.timeSlide, hkt);
             OutputStream out = fs.create(new Path("frontend/Hdata/" + "frame_"+ (t + 1) + ".txt"));
             StringBuffer buffer = new StringBuffer();
             for (int i = 0; i < N; i++) {
@@ -51,15 +50,20 @@ public class main {
     public static void main(String[] args) throws Exception {
         //Integer rowId = Integer.valueOf("0") ;
         //System.out.println(rowId);
-        Runtime.getRuntime().exec("rm -r -f frontend/OceanHeight") ;
-        Runtime.getRuntime().exec("rm -r -f frontend/Hdata") ;
-        generateInitialData();
-        OceanFFTDriver.run();
+        //Runtime.getRuntime().exec("rm -r -f frontend/OceanHeight") ;
+        //Runtime.getRuntime().exec("rm -r -f frontend/Hdata") ;
+        //generateInitialData();
+        //OceanFFTDriver.run();
 
+        //EngineDriver.run(1);
 
+        for(Integer iter = 0; iter < Conf.totalFrame; iter ++)
+            Runtime.getRuntime().exec("rm -r -f frontend/ModelData/" + (iter + 1));
 
-        //for(int iter = 0; iter < T; iter ++)
-        //    EngineDriver.run(iter+1);
+        for(Integer iter = 0; iter < Conf.totalFrame; iter ++) {
+            System.out.printf("Current frame: %d\n", iter) ;
+            EngineDriver.run(iter + 1);
+        }
         /*ArrayList<Complex> in = new ArrayList<Complex>() ;
         for (int i = 0; i < (1<<3); i ++)
             in.add(new Complex(i+1, (i+1)*2)) ;
