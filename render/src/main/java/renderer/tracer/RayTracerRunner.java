@@ -73,10 +73,12 @@ public class RayTracerRunner {
 
     private Color calnReflection(Collider collider, Vec3d ray_V, int dep, boolean refracted , IntPtr hash) {
         Primitive pri = collider.getPrimitive();
+        double n = pri.getMaterial().rindex;
+        if (!refracted) n = 1.0 / n;
+        double refl = pri.getMaterial().getRefl(ray_V, collider.N, n);
         ray_V = ray_V.reflect(collider.N);
-
         if (pri.getMaterial().drefl < EPS || dep > MAX_DREFL_DEP) {
-            Color alpha = pri.getMaterial().color.mul(pri.getMaterial().refl);
+            Color alpha = pri.getMaterial().color.mul(refl);
             return rayTracing(collider.C, ray_V, dep + 1, refracted, hash).mul(alpha);
         }
 
@@ -87,7 +89,7 @@ public class RayTracerRunner {
 
         int totalSample = camera.getDreflQuality();
         Color rcol = new Color();
-        Color alpha = pri.getMaterial().color.mul(pri.getMaterial().refl).div(totalSample);
+        Color alpha = pri.getMaterial().color.mul(refl).div(totalSample);
         for (int k = 0; k < totalSample; k++) {
             double x, y;
             // FIXME: random seed need change for multiThread.
@@ -107,12 +109,13 @@ public class RayTracerRunner {
         Primitive pri = collider.getPrimitive();
         double n = pri.getMaterial().rindex;
         if (!refracted) n = 1.0 / n;
+        double refr = pri.getMaterial().getRefr(ray_V, collider.N, n);
 
         BooleanPtr nextRefracted = new BooleanPtr(refracted);
         ray_V = ray_V.refract(collider.N, n, nextRefracted);
 
         Color alpha = new Color(1.0, 1.0, 1.0);
-        alpha.mulToThis(pri.getMaterial().refr);
+        alpha.mulToThis(refr);
         if (refracted) {
             alpha.mulToThis((pri.getMaterial().absor.mul(-collider.dist)).exp());
         }
@@ -140,9 +143,11 @@ public class RayTracerRunner {
             Primitive nearest_primitive = collider.getPrimitive();
             if (hash != null) hash.set((hash.get() + nearest_primitive.getSample()) % HASH_MOD);
             if (nearest_primitive.getMaterial().diff > EPS) ret.addToThis(calnDiffusion(collider, hash));
+            double n = nearest_primitive.getMaterial().rindex;
+            if (!refracted) n = 1.0 / n;
             if (!camera.getAlgorithm().equals("RC")) {
-                if (nearest_primitive.getMaterial().refl > EPS) ret.addToThis(calnReflection(collider, ray_V, dep, refracted, hash));
-                if (nearest_primitive.getMaterial().refr > EPS) ret.addToThis(calnRefraction(collider, ray_V, dep, refracted, hash));
+                if (nearest_primitive.getMaterial().getRefl(ray_V, collider.N, n) > EPS) ret.addToThis(calnReflection(collider, ray_V, dep, refracted, hash));
+                if (nearest_primitive.getMaterial().getRefr(ray_V, collider.N, n) > EPS) ret.addToThis(calnRefraction(collider, ray_V, dep, refracted, hash));
             }
         }
 

@@ -8,7 +8,7 @@ import static renderer.utils.Vec3d.EPS;
 public class Material {
 
     public Color color, absor;
-    public double refl, refr;
+    private double refl, refr;
     public double diff, spec;
     public double rindex;
     public double drefl;
@@ -33,6 +33,14 @@ public class Material {
         rindex = m.rindex;
         drefl = m.drefl;
         texture = m.texture;
+    }
+
+    public double getRefl(Vec3d rey_I, Vec3d N, double n) {
+        return refl;
+    }
+
+    public double getRefr(Vec3d rey_I, Vec3d N, double n) {
+        return refr;
     }
 
     public double BRDF(Vec3d ray_R, Vec3d N, Vec3d ray_I) {
