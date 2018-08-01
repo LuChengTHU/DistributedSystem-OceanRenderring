@@ -33,13 +33,6 @@ primitive sphere		#设置一个球（一个透明的玻璃球）
 	absor= 1 0 0			//吸收色光的强度					[*有折射时必须]
 end
 
-primitive sphere		#设置一个球（一个镜面反射的球）
-	O= 1.2 6.5 -1.6
-	R= 0.4
-	color= 0.5 0.5 1
-	refl= 1				//镜面反射所占百分比				[缺省值0]
-end
-
 primitive plane				//大理石地板
 	N= 0 0 1			//平面的法向量（正方向）				[*]
 	R= -2				//原点到平面的距离				[*]
@@ -50,4 +43,15 @@ primitive plane				//大理石地板
 	texture= marble.bmp
 	Dx= 8 0 0			//平面的x轴，其长度有意义：其纹理在场景中的长	[*有纹理时必须]
 	Dy= 0 8 0			//平面的y轴					[*有纹理时必须]
+end
+
+primitive polyhedron
+	O= 1.2 6.5 -1.6
+	size= 0.5 0.5 0.5
+	angles= 0 0 90
+	mesh= bunny.obj
+	diff= 0.6
+    refl= 0.4
+    drefl= 0.15
+	color= 0.5 1 0.5
 end

@@ -49,8 +49,6 @@ public class Bmp {
         ima.setRGB(x, getH() - 1 - y, c.getRGB());
     }
 
-
-    // FIXME: use HDFS??
     public void input(String value) throws IOException {
         StringTokenizer tk = new StringTokenizer(value);
         if (tk.hasMoreTokens()) {

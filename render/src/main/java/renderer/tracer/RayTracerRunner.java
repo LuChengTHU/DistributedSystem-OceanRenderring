@@ -90,7 +90,6 @@ public class RayTracerRunner {
         Color alpha = pri.getMaterial().color.mul(pri.getMaterial().refl).div(totalSample);
         for (int k = 0; k < totalSample; k++) {
             double x, y;
-            // FIXME: random seed need change for multiThread.
             do {
                 x = Math.random() * 2 - 1;
                 y = Math.random() * 2 - 1;

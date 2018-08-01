@@ -5,8 +5,6 @@ import renderer.tracer.RayTracer;
 import renderer.tracer.RayTracerDriver;
 import renderer.utils.FileLoader;
 
-import java.io.IOException;
-
 public class Main {
 
     public static void main(String[] args) throws Exception {

@@ -70,6 +70,12 @@ public class Vec3d {
         return 0.0;
     }
 
+    public void setCoord(int axis, double value) {
+        if (axis == 0) x = value;
+        if (axis == 1) y = value;
+        if (axis == 2) z = value;
+    }
+
     public Vec3d rotate(Vec3d axis, double theta) {
         Vec3d ret = new Vec3d();
         double cost = Math.cos( theta );

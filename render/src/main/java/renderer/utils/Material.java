@@ -13,6 +13,7 @@ public class Material {
     public double rindex;
     public double drefl;
     public Bmp texture;
+    public Bmp bump;
 
     public Material() {
         color = new Color(0, 0, 0);
@@ -21,6 +22,7 @@ public class Material {
         rindex = 0;
         drefl = 0;
         texture = null;
+        bump = null;
     }
 
     public Material(Material m) {
@@ -33,6 +35,7 @@ public class Material {
         rindex = m.rindex;
         drefl = m.drefl;
         texture = m.texture;
+        bump = m.bump;
     }
 
     public double BRDF(Vec3d ray_R, Vec3d N, Vec3d ray_I) {
@@ -58,6 +61,10 @@ public class Material {
         if (var.equals("texture=")) {
             texture = new Bmp();
             texture.input(value);
+        }
+        if (var.equals("bump=")) {
+            bump = new Bmp();
+            bump.input(value);
         }
         StringTokenizer tk = new StringTokenizer(value);
         if (tk.hasMoreTokens()) {

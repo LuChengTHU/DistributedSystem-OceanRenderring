@@ -45,7 +45,6 @@ public class Light {
     public Color calnIrradiance(Collider collider, Vec3d V, IntPtr hash) {
         Primitive pri = collider.getPrimitive();
         Color ret = color.mul(pri.getMaterial().BRDF(V, collider.N, collider.I.inv()));
-        // FIXME, for path tracing
         ret.divToThis(V.module2()); //rt adapts to ppm
 
         if (!ret.isZeroColor() && hash != null) {

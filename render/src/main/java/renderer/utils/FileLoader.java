@@ -7,9 +7,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 
-import renderer.objects.Plane;
-import renderer.objects.Primitive;
-import renderer.objects.Sphere;
+import renderer.objects.*;
 import renderer.scene.AreaLight;
 import renderer.scene.Light;
 import renderer.scene.Scene;
@@ -51,6 +49,8 @@ public class FileLoader {
                 String type = tk.nextToken();
                 if (type.equals("sphere")) new_primitive = new Sphere();
                 if (type.equals("plane")) new_primitive = new Plane();
+                if (type.equals("triangle")) new_primitive = new Triangle();
+                if (type.equals("polyhedron")) new_primitive = new Polyhedron();
                 scene.addPrimitive(new_primitive);
             } else if (var.equals("light")) {
                 String type = tk.nextToken();
