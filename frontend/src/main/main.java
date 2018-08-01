@@ -1,6 +1,8 @@
 package main;
 
 import core.Conf;
+import Utils.Utils;
+
 import oceanFFT.H;
 import oceanFFT.HGenerator;
 import oceanFFT.OceanFFTDriver;
@@ -48,28 +50,25 @@ public class main {
     }
 
     public static void main(String[] args) throws Exception {
-        //Integer rowId = Integer.valueOf("0") ;
-        //System.out.println(rowId);
         //Runtime.getRuntime().exec("rm -r -f frontend/OceanHeight") ;
         //Runtime.getRuntime().exec("rm -r -f frontend/Hdata") ;
-        //generateInitialData();
-        //OceanFFTDriver.run();
-
-        //EngineDriver.run(1);
-
         for(Integer iter = 0; iter < Conf.totalFrame; iter ++)
             Runtime.getRuntime().exec("rm -r -f frontend/ModelData/" + (iter + 1));
 
+        System.out.println("Start Generate Init Data");
+        //generateInitialData();
+
+        System.out.println("Start FFT");
+        //OceanFFTDriver.run();
+
+        System.out.println("Start convert to obj");
+        Utils.gridHeightToObj();
+
+        System.out.println("Start calculate engine");
         for(Integer iter = 0; iter < Conf.totalFrame; iter ++) {
             System.out.printf("Current frame: %d\n", iter) ;
             EngineDriver.run(iter + 1);
         }
-        /*ArrayList<Complex> in = new ArrayList<Complex>() ;
-        for (int i = 0; i < (1<<3); i ++)
-            in.add(new Complex(i+1, (i+1)*2)) ;
-        FFT.calcFFT(in);
-        for(int i = 0; i < (1<<3); i ++)
-            System.out.println(in.get(i));*/
     }
 
 }
