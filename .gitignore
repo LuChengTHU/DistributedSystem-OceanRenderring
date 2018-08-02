@@ -31,5 +31,7 @@ hs_err_pid*
 frontend/Hdata/*
 frontend/OceanHeight/*
 frontend/ModelData/*
+frontend/OceanTxt/*
+frontend/OceanObj/*
 demoImg/*
 out/*

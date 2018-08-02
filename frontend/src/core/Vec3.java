@@ -43,10 +43,7 @@ public class Vec3 {
     {
         float length = length();
         if (length < 0.0001) length = 0.0001f;
-        X /= length;
-        Y /= length;
-        Z /= length;
-        return this;
+        return new Vec3(X/length, Y/length, Z/length) ;
     }
 
     public Vec3 add(Vec3 r)

@@ -43,6 +43,10 @@ public class Vec2 {
         return this;
     }
 
+    public Vec3 toVec3() {return new Vec3(this.X, this.Y, 0) ;}
+
+    public Vec2 transform() {return new Vec2(this.Y, this.X) ;}
+
     public Vec2 add(Vec2 r)
     {
         return new Vec2(this.X + r.getX(), this.Y + r.getY());

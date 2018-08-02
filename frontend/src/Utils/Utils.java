@@ -28,17 +28,18 @@ public class Utils
             String[] splitString = line.split("\t");
             String index = splitString[0], heights = splitString[1];
             String[] splitIndex = index.split(" ");
-            int frameIndex = Integer.parseInt(splitIndex[0]), lineIndex = Integer.parseInt(splitIndex[1]);
+            int frameIndex = Integer.parseInt(splitIndex[0])-1, lineIndex = Integer.parseInt(splitIndex[1]);
             heightData[frameIndex * N + lineIndex] = heights;
         }
         for (int i = 0; i < T; i++) {
-            if (!fs.exists(new Path("frontend/GridHeight")))
-                fs.mkdirs(new Path("frontend/GridHeight"));
-            if (!fs.exists(new Path("frontend/GridHeight/" + i)))
-                fs.mkdirs(new Path("frontend/GridHeight/" + i));
-            OutputStream out = fs.create(new Path("frontend/GridHeight/" + i + "/gridheight.txt"));
+            if (!fs.exists(new Path("frontend/OceanTxt")))
+                fs.mkdirs(new Path("frontend/OceanTxt"));
+            if (!fs.exists(new Path("frontend/OceanTxt/" + i)))
+                fs.mkdirs(new Path("frontend/OceanTxt/" + i));
+            OutputStream out = fs.create(new Path("frontend/OceanTxt/" + i + "/height.txt"));
             StringBuffer buffer = new StringBuffer();
             for (int j = 0; j < N; j++) {
+                buffer.append(Integer.valueOf(j)+"\t") ;
                 buffer.append(heightData[i * N + j]);
                 buffer.append("\n");
             }
@@ -61,7 +62,7 @@ public class Utils
             String[] splitString = line.split("\t");
             String index = splitString[0], heightLine = splitString[1];
             String[] splitIndex = index.split(" ");
-            int frameIndex = Integer.parseInt(splitIndex[0]), lineIndex = Integer.parseInt(splitIndex[1]);
+            int frameIndex = Integer.parseInt(splitIndex[0])-1, lineIndex = Integer.parseInt(splitIndex[1]);
             String[] heights = heightLine.split(" ");
             for (int i = 0; i < heights.length; i++) {
                 heightData[frameIndex * N * N + lineIndex * N + i] = Float.parseFloat(heights[i]);

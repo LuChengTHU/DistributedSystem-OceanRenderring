@@ -54,6 +54,7 @@ public class main {
         //Runtime.getRuntime().exec("rm -r -f frontend/Hdata") ;
         for(Integer iter = 0; iter < Conf.totalFrame; iter ++)
             Runtime.getRuntime().exec("rm -r -f frontend/ModelData/" + (iter + 1));
+        //Runtime.getRuntime().exec("rm -r -f frontend/OceanTxt");
 
         System.out.println("Start Generate Init Data");
         //generateInitialData();
@@ -62,12 +63,13 @@ public class main {
         //OceanFFTDriver.run();
 
         System.out.println("Start convert to obj");
-        Utils.gridHeightToObj();
+        //Utils.gridHeightToObj();
+        //Utils.gridHeightToTxt();
 
-        System.out.println("Start calculate engine");
+        //System.out.println("Start calculate engine");
         for(Integer iter = 0; iter < Conf.totalFrame; iter ++) {
-            System.out.printf("Current frame: %d\n", iter) ;
-            EngineDriver.run(iter + 1);
+           System.out.printf("Current frame: %d\n", iter) ;
+           EngineDriver.run(iter + 1);
         }
     }
 
