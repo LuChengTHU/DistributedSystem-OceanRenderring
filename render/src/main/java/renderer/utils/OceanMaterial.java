@@ -5,7 +5,8 @@ public class OceanMaterial extends Material {
     public double getRefl(Vec3d ray_I, Vec3d N, double n) {
         N = N.normalize();
         ray_I = ray_I.normalize();
-        double cosThetaI = Math.cos(ray_I.dot(N));
+        n = 1.0/n;
+        double cosThetaI = Math.abs(ray_I.dot(N));
         double thetaI = Math.acos(cosThetaI);
         double sinThetaT = Math.sin(thetaI) / n;
         double thetaT = Math.asin(sinThetaT);
