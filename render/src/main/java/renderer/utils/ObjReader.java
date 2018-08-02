@@ -142,17 +142,17 @@ public class ObjReader {
                 mat[matCnt].diff = mat[matCnt].color.RGBMax();
                 mat[matCnt].color.divToThis(mat[matCnt].diff);
             }
-            if (var.equals("Ks")) {
-                if (!tk.hasMoreTokens()) continue;
-                mat[matCnt].refl = Double.valueOf(tk.nextToken());
-            }
-            if (var.equals("Tf")) {
-                mat[matCnt].absor.input(value);
-                if (mat[matCnt].absor.power() < 1 - EPS) {
-                    mat[matCnt].refr = 1;
-                    mat[matCnt].diff = mat[matCnt].spec = mat[matCnt].refl = 0;
-                }
-            }
+//            if (var.equals("Ks")) {
+//                if (!tk.hasMoreTokens()) continue;
+//                mat[matCnt].refl = Double.valueOf(tk.nextToken());
+//            }
+//            if (var.equals("Tf")) {
+//                mat[matCnt].absor.input(value);
+//                if (mat[matCnt].absor.power() < 1 - EPS) {
+//                    mat[matCnt].refr = 1;
+//                    mat[matCnt].diff = mat[matCnt].spec = mat[matCnt].refl = 0;
+//                }
+//            }
             if (var.equals("Ni")) {
                 if (!tk.hasMoreTokens()) continue;
                 mat[matCnt].rindex = Double.parseDouble(tk.nextToken());
