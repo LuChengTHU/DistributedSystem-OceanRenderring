@@ -124,8 +124,8 @@ public class Triangle extends Primitive {
         double reci = 1.0 / (B.getCoord(u) * C.getCoord(v) - B.getCoord(v) * C.getCoord(u));
         bnu = B.getCoord(u) * reci;
         bnv = -B.getCoord(v) * reci;
-        cnu = C.getCoord(u) * reci;
-        cnv = -C.getCoord(v) * reci;
+        cnu = -C.getCoord(u) * reci;
+        cnv = C.getCoord(v) * reci;
         N = N.normalize();
     }
 
