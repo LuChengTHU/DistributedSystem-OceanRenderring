@@ -11,7 +11,7 @@ public class Camera {
     public static final int KD_MAX_THREADS = 10;
     public static final int PM_MAX_THREADS = 10;
     public static final int RT_MAX_THREADS = 10;
-    public static final String STD_ALGORITHM = "SPPM";
+    public static final String STD_ALGORITHM = "RT";
     public static final int STD_DOF_SAMPLE = 64;
     public static final double STD_APERTURE = 0;
     public static final double STD_FOCAL_LEN = 1;

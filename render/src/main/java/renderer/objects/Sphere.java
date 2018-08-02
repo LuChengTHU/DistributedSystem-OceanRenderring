@@ -74,7 +74,7 @@ public class Sphere extends Primitive{
         double b = Math.acos(Math.min(Math.max(I.dot(Dc) / Math.sin(a), -1.0), 1.0));
         double u = a / Math.PI, v = b / 2.0 / Math.PI;
         if (I.dot(Dc.cross(De)) < 0) v = 1 - v;
-        return material.texture.getSmoothColor(u*5, v*5+0.5);
+        return material.texture.getSmoothColor(u*5-0.1, v*5+0.5);
     }
 
 }
