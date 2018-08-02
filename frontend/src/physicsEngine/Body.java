@@ -27,15 +27,15 @@ public class Body {
     {
         if(mass == 0) this.mass = 0.01f ;
         else this.mass = mass ;
-        this.position = position ;
-        this.velocity = velocity ;
+        this.position = new Vec3(position) ;
+        this.velocity = new Vec3(velocity) ;
     }
 
 
     public Vec3 getVelocity() {return velocity ;}
     public Vec3 getPosition() {return position ;}
-    public void setPosition(Vec3 position) {this.position = position ;}
-    public void setVelocity(Vec3 velocity) {this.position = velocity ;}
+    public void setPosition(Vec3 position) {this.position = new Vec3(position) ;}
+    public void setVelocity(Vec3 velocity) {this.position = new Vec3(velocity) ;}
 
     public void addForce(Vec3 force, float dt)
     {

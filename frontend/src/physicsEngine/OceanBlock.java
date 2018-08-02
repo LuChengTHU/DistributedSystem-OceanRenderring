@@ -46,7 +46,7 @@ public class OceanBlock {
                 Vec3 surfPoint = new Vec3(oceanPosition.getX(), oceanPosition.getY(), bottom);
                 Vec3 buoyantDir = new Vec3(0, 0, 1);
                 Vec3 pushDir = b.position.sub(surfPoint).normalize();
-                pushDir = pushDir.add(Conf.wDirection.transform().toVec3().mul(0.1f)).normalize();
+                pushDir = pushDir.add(Conf.wDirection.transform().toVec3().mul(0.0f)).normalize();
                 pushDir.setZ(0);
                 buoyant = buoyant.add(buoyantDir.mul(buoyantValue));
                 push = push.add(pushDir.mul(buoyantValue));

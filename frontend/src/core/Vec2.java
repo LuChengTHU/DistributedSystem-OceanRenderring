@@ -37,10 +37,8 @@ public class Vec2 {
     {
         float length = length();
         if (length < 0.0001) length = 0.0001f;
-        X /= length;
-        Y /= length;
 
-        return this;
+        return new Vec2(X/length, Y/length);
     }
 
     public Vec3 toVec3() {return new Vec3(this.X, this.Y, 0) ;}

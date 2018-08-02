@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 
+import static core.Conf.worldSeaScale;
+
 public class Utils
 {
     public static void gridHeightToTxt() throws IOException {
@@ -82,7 +84,7 @@ public class Utils
                     buffer.append(" ");
                     buffer.append(k * dx);
                     buffer.append(" ");
-                    buffer.append(heightData[i * N * N + j * N + k]);
+                    buffer.append(heightData[i * N * N + j * N + k] * worldSeaScale);
                     buffer.append("\n");
                 }
             }

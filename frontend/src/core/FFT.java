@@ -41,8 +41,8 @@ public class FFT {
         //System.out.printf("Calc: base = %d, deep = %d\n", base, deep);
         for(i = ss = 0; i < half; i ++)
         {
-            a = in.get(ss+base) ;
-            b = in.get(ss+base+step) ;
+            a = new Complex(in.get(ss+base)) ;
+            b = new Complex(in.get(ss+base+step)) ;
             //System.out.printf("Calc: a = %s, b = %s, w = %s\n", a, b, w[i<<deep]);
             if(flag == 0) b = b.mul(w[i<<deep]) ;
             //else b = b/w[i<<deep] ;

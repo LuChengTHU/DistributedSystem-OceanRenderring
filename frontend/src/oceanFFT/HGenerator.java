@@ -20,7 +20,7 @@ public class HGenerator {
     public static final float wSpeed = Conf.wSpeed;
     public static final float minWaveSize = Conf.minWaveSize ;
     public static final Vec2 wDirection = Conf.wDirection; // wind (1, 0)
-    public static final Random random = new Random();
+    public Random random = new Random();
 
     private static HGenerator hGenerator = new HGenerator();
 
@@ -45,9 +45,9 @@ public class HGenerator {
         float L2 = L_ * L_;
         // |k_normal * w_normal|
         float kw = k.normalize().dot(wDirection.normalize());
-        float kw2 = kw * kw;
+        float kw2 = kw * kw ;
         // Ph(k)
-        float Phk = A / mag4 * (float)Math.exp(-1.0/(mag2 * L2)) * (float)Math.exp(-mag2*Math.pow(minWaveSize, 2)) * kw2;
+        float Phk = A / mag4 * (float)Math.exp(-1.0/(mag2 * L2)) * (float)Math.exp(-mag2*Math.pow(L/2000, 2)) * kw2;
         float PhkSqrt = (float)Math.sqrt(Phk);
         return PhkSqrt;
     }
@@ -61,8 +61,8 @@ public class HGenerator {
         float log_2 = (float) Math.sqrt(2);
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                int n = -N/2+i;
-                int m = -N/2+j;
+                int n = i;
+                int m = j;
                 if(n > N/2) n -= N ;
                 if(m > N/2) m -= N ;
                 Vec2 k = new Vec2(2 * PI * n / L, 2 * PI * m / L);
@@ -70,6 +70,9 @@ public class HGenerator {
                 float epsilon1 = (float) random.nextGaussian(), epsilon2 = (float) random.nextGaussian();
                 Complex r = new Complex(epsilon1 / log_2, epsilon2 / log_2);
                 h0k.set(i * N + j, r.mul(phillips(k)));
+                epsilon1 = (float) random.nextGaussian() ;
+                epsilon2 = (float) random.nextGaussian();
+                r = new Complex(epsilon1 / log_2, epsilon2 / log_2);
                 h0minusk.set(i * N + j, r.mul(phillips(minusk)).conj());
             }
         }
@@ -78,8 +81,8 @@ public class HGenerator {
     public void generateHkt(H h0k, H h0minusk, float t, H hkt) {
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                int n = -N/2+i;
-                int m = -N/2+j;
+                int n = i;
+                int m = j;
                 if(n > N/2) n -= N ;
                 if(m > N/2) m -= N ;
 
@@ -89,42 +92,10 @@ public class HGenerator {
                 float im = (float)Math.sin(omega_t);
                 Complex c0 = new Complex(real, im);
                 Complex c1 = new Complex(real, -im);
-                hkt.set(i*N+j, c0.mul(h0k.get(i*N+j)).add(c1.mul(h0k.get((N-i)%N*N+(N-j)%N).conj())));
+                hkt.set(i*N+j, c0.mul(h0k.get(i*N+j)).add(c1.mul(h0minusk.get(i*N+j).conj())));
                 //System.out.println(c0.mul(h0k.get(i*N+j)).toString() + " " + c1.mul(h0minusk.get(i*N+j)).toString());
             }
         }
     }
 
-
-    public void generateInitialData() throws IOException {
-        H h0k = new H(N), h0minusk = new H(N);
-        generateH0k(h0k, h0minusk);
-        Configuration conf = new Configuration();
-        FileSystem fs = FileSystem.get(conf);
-        for (int t = 0; t < Conf.totalFrame; t++) {
-            H hkt = new H(N);
-            generateHkt(h0k, h0minusk, t / 3.0f, hkt);
-
-            OutputStream out = fs.create(new Path("frontend/Hdata/" + "frame_" + t + ".txt"));
-            StringBuffer buffer = new StringBuffer();
-            for (int i = 0; i < N; i++) {
-                buffer.append(String.valueOf(i));
-                buffer.append("\t");
-                for (int j = 0; j < N; j++) {
-                    if (j > 0)
-                        buffer.append(" ");
-                    buffer.append(hkt.get(i * N + j).toString());
-                    //System.out.println("i="+i+" j="+j+":"+hkt[i*N+j].getReal() + " i"+hkt[i*N+j].getIm());
-                }
-                buffer.append("\n");
-                //System.out.println(buffer.toString());
-            }
-            out.write(buffer.toString().getBytes());
-            out.close();
-
-            if (t == 0)
-                for (int i = 0; i < N; i++)
-                    System.out.println(hkt.get(i));
-        }
-    }
 }

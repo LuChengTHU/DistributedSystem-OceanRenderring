@@ -15,6 +15,11 @@ public class Complex {
         this.real = (float)real;
         this.im   = (float)im;
     }
+    public Complex(Complex c)
+    {
+        this.real = c.real ;
+        this.im = c.im ;
+    }
     public Complex(String str)
     {
         String[] strArr = str.replaceAll("[\\(\\)]", "").split(",") ;

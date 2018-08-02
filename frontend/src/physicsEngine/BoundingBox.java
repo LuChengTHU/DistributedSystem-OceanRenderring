@@ -8,13 +8,13 @@ public class BoundingBox {
 
     public BoundingBox(Vec3 p0, Vec3 p1)
     {
-        this.p0 = p0 ;
-        this.p1 = p1 ;
+        this.p0 = new Vec3(p0) ;
+        this.p1 = new Vec3(p1) ;
     }
 
     static public BoundingBox valueOf(Ball b, Float timeSlide)
     {
-        Vec3 before = b.position ;
+        Vec3 before = new Vec3(b.position) ;
         Vec3 after = b.position.add(b.velocity.mul(timeSlide)) ;
         Vec3 p0 = new Vec3(Math.min(before.getX(), after.getX()), Math.min(before.getY(), after.getY()), Math.min(before.getZ(), after.getZ())).sub(b.radius) ;
         Vec3 p1 = before.add(after).sub(p0) ;
