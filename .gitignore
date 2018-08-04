@@ -28,6 +28,7 @@ hs_err_pid*
 .idea
 *.iml
 
+
 frontend/Hdata/*
 frontend/OceanHeight/*
 frontend/ModelData/*
@@ -35,3 +36,10 @@ frontend/OceanTxt/*
 frontend/OceanObj/*
 demoImg/*
 out/*
+
+*.jpg
+*.MF
+
+*.crc
+*.obj
+

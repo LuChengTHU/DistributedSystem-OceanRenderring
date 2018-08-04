@@ -1,0 +1,59 @@
+background
+	color= 0.1 0.1 0.1
+end
+
+camera
+	algorithm= RT
+	O= 0 5 1
+	N= 0 1 -0.1
+	image_H= 450
+	image_W= 800
+	lens_H= 0.6
+	lens_W= 1.0
+	shade_quality= 4
+	drefl_quality= 4
+	max_photons= 5000000
+	emit_photons= 20000000
+	sample_photons= 500
+	sample_dist= 0.1
+end
+
+light area
+	O= 0 0 5
+	Dx= 0 3 3
+	Dy= 3 0 0
+	color= 30 30 30
+end
+
+primitive polyhedron
+	O= -5 4 0
+	size= 0.00512695 0.00512695 0.00512695
+	angles= 0 0 0
+	mesh= ocean.obj
+	diff= 0
+	drefl= 0
+	color= 3 3 3
+	absor= 0 0 0
+	rindex= 1.34
+end
+
+primitive plane
+	N= 0 0 1
+	R= -0.5
+	color= 0 0.2 0.3
+	diff= 1
+	refl= 1
+	refr= 0
+	drefl= 0.2
+	Dx= 8 0 0
+	Dy= 0 8 0
+end
+
+
+primitive sphere
+	O= 0 5 0
+	R= 10
+	color= 8 8 8
+	diff= 0.6
+	texture= sky.png
+end
