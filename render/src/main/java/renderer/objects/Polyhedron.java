@@ -1,6 +1,7 @@
 package renderer.objects;
 
 import renderer.utils.ObjReader;
+import renderer.utils.OceanMaterial;
 import renderer.utils.Vec3d;
 import renderer.utils.Pair;
 
@@ -52,6 +53,7 @@ public class Polyhedron extends Primitive {
         angles = new Vec3d(0, 0, 0);
         tree = new TriangleTree();
         O = new Vec3d();
+        super.material = new OceanMaterial();
     }
 
     @Override

@@ -146,6 +146,7 @@ public class Triangle extends Primitive {
         if (x < 0 || y < 0 || x + y > 1) return collider;
         if (parent != null && !parent.getVertexN(normalVectorID[0].get()).isZeroVector()) {
             collider.N = parent.getVertexN(normalVectorID[0].get()).mul(1 - x - y).add(parent.getVertexN(normalVectorID[1].get()).mul(x)).add(parent.getVertexN(normalVectorID[2].get()).mul(y));
+            collider.N = collider.N.normalize();
         } else {
             collider.N = N;
         }

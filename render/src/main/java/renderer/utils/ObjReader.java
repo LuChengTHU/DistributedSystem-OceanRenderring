@@ -10,6 +10,7 @@ import renderer.objects.TriangleNode;
 import renderer.tracer.RayTracerDriver;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -21,6 +22,7 @@ public class ObjReader {
     Polyhedron polyhedron;
     int vSize, vtSize, vnSize, fSize, matSize;
     Vec3d[] v;
+    ArrayList<Integer>[] vec2F;
     Pair[] vt;
     Vec3d[] vn;
     Triangle[] tris;
@@ -96,9 +98,12 @@ public class ObjReader {
         }
 
         v = new Vec3d[vSize + 1];
+        vec2F = new ArrayList[vSize + 1];
         for (int i = 0; i < vSize + 1; i++) {
             v[i] = new Vec3d();
+            vec2F[i] = new ArrayList<Integer>();
         }
+
         vt = new Pair[vtSize + 1];
         if (vnSize == 0) {
             vn = new Vec3d[vSize + 1];
@@ -142,17 +147,17 @@ public class ObjReader {
                 mat[matCnt].diff = mat[matCnt].color.RGBMax();
                 mat[matCnt].color.divToThis(mat[matCnt].diff);
             }
-            if (var.equals("Ks")) {
-                if (!tk.hasMoreTokens()) continue;
-                mat[matCnt].refl = Double.valueOf(tk.nextToken());
-            }
-            if (var.equals("Tf")) {
-                mat[matCnt].absor.input(value);
-                if (mat[matCnt].absor.power() < 1 - EPS) {
-                    mat[matCnt].refr = 1;
-                    mat[matCnt].diff = mat[matCnt].spec = mat[matCnt].refl = 0;
-                }
-            }
+//            if (var.equals("Ks")) {
+//                if (!tk.hasMoreTokens()) continue;
+//                mat[matCnt].refl = Double.valueOf(tk.nextToken());
+//            }
+//            if (var.equals("Tf")) {
+//                mat[matCnt].absor.input(value);
+//                if (mat[matCnt].absor.power() < 1 - EPS) {
+//                    mat[matCnt].refr = 1;
+//                    mat[matCnt].diff = mat[matCnt].spec = mat[matCnt].refl = 0;
+//                }
+//            }
             if (var.equals("Ni")) {
                 if (!tk.hasMoreTokens()) continue;
                 mat[matCnt].rindex = Double.parseDouble(tk.nextToken());
@@ -252,6 +257,8 @@ public class ObjReader {
                         vertexPos = vertexPos.rotate(new Vec3d(0, 0, 1), polyhedron.getAngles().getCoord(2));
                         vertexPos = polyhedron.getO().add(vertexPos.mul(polyhedron.getSize()));
                         tri.setPos(vertexID, vertexPos);
+
+                        vec2F[buffer[0]].add(fCnt);
                     }
                     if (buffer[1] > 0) {
                         tri.getTextureVertex(vertexID).set(buffer[1]);
@@ -266,6 +273,34 @@ public class ObjReader {
                 }
             }
         }
+
+        for (int i = 1; i <= vCnt; i++) {
+            Vec3d thisVn = new Vec3d(0, 0, 0);
+            for (Integer f : vec2F[i]) {
+                int x = -1, y = -1;
+                for (int j = 0; j < 3; j++) {
+                    if (tris[f].getVertex(j).get() == i) {
+                        x = tris[f].getVertex ((j + 1) % 3).get();
+                        y = tris[f].getVertex ((j + 2) % 3).get();
+                        break;
+                    }
+                }
+                Vec3d ix = v[x].sub(v[i]), iy = v[y].sub(v[i]);
+                double angle = Math.abs(ix.dot(iy) / ix.module() / iy.module());
+                thisVn.addToThis(tris[f].getN().mul(angle));
+            }
+            thisVn = thisVn.normalize();
+            if (thisVn.isZeroVector()) thisVn = new Vec3d(0, 0, 1);
+            vnCnt++;
+            vn[i] = thisVn;
+        }
+
+        for (int i = 0; i < fCnt; i++) {
+            for (int j = 0; j < 3; j++) {
+                tris[i].getNormalVecctorID(j).set(tris[i].getVertex(j).get());
+            }
+        }
+
         calnVn();
 
         TriangleNode root = polyhedron.getTree().getRoot();

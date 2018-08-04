@@ -22,7 +22,7 @@ import renderer.utils.FileLoader;
 
 public class RayTracerDriver {
 
-    public static final FileLoader.ENV rtEnv = FileLoader.ENV.HDFS;
+    public static final FileLoader.ENV rtEnv = FileLoader.ENV.NATIVE;
 
     public void run() throws Exception {
         Configuration conf = new Configuration();

@@ -1,46 +1,59 @@
-background			#设置背景
-	color= 0.05 0.05 0.05		//背景颜色					[缺省值(0,0,0)]
-end				#结束设置背景
-
-camera				#设置摄像机信息
-	algorithm= RT			//使用的算法（RC/RT/PM/PPM/SPPM）			[缺省值PPM]
-	O= 2 2 0.5			//感光点的位置					[*]
-	N= -0.5 1 -0.6			//摄像机的朝向					[*]
-	image_H= 760			//bmp图像的象素高				[缺省值420]
-	image_W= 1280			//bmp图像的象素宽				[缺省值420]
-	lens_H= 0.6			//摄像机镜头的高（与镜头到感光点距离之比）	[缺省值0.88]
-	lens_W= 1.0			//摄像机镜头的宽				[缺省值0.88]
-	shade_quality= 4		//计算面积光源光照的质量			[缺省值4]
-	drefl_quality= 20		//计算镜面漫反射的质量				[缺省值20]
-	max_photons= 5000000		//光子图可容纳光子数				[缺省值500000（PM时推荐值为1e7）]
-	emit_photons= 20000000		//总发射光子数					[缺省值100000（PM时推荐值为1e7）]
-	sample_photons= 500		//采样时所需光子数				[缺省值10（PM时推荐值为500）]
-	sample_dist= 0.1		//采样时最大半径					[缺省值0.1]
+background
+	color= 0.1 0.1 0.1
 end
 
-light area			#设置一个矩形光源
-	O= 3 8 2.7			//矩形光源的中心点				[*]
-	Dx= 0.75 0 0			//矩形光源的x半轴				[*]
-	Dy= 0 0.75 0			//矩形光源的y半轴				[*]
-	color= 50 50 50			//光源的色光					[*]
+camera
+	algorithm= RT
+	O= 0 5 1
+	N= 0 1 -0.1
+	image_H= 450
+	image_W= 800
+	lens_H= 0.6
+	lens_W= 1.0
+	shade_quality= 4
+	drefl_quality= 4
+	max_photons= 5000000
+	emit_photons= 20000000
+	sample_photons= 500
+	sample_dist= 0.1
 end
 
-primitive sphere		#设置一个球（一个透明的玻璃球）
-	O= 0.6 5.8 -1.8		//球形						[*]
-	R= 0.2				//半径						[*]
-	refr= 1				//折射所占百分比					[缺省值0]
-	rindex= 1.7			//折射率						[*有折射时必须]
-	absor= 1 0 0			//吸收色光的强度					[*有折射时必须]
+light area
+	O= 0 0 5
+	Dx= 0 3 3
+	Dy= 3 0 0
+	color= 30 30 30
 end
-
 
 primitive polyhedron
-	O= 0.6 5.8 -4.6
-	size= 0.02 0.02 0.02
-	angles= 0 0 90
+	O= -5 4 0
+	size= 0.00512695 0.00512695 0.00512695
+	angles= 0 0 0
 	mesh= ocean.obj
+	diff= 0
+	drefl= 0
+	color= 3 3 3
+	absor= 0 0 0
+	rindex= 1.34
+end
+
+primitive plane
+	N= 0 0 1
+	R= -0.5
+	color= 0 0.2 0.3
+	diff= 1
+	refl= 1
+	refr= 0
+	drefl= 0.2
+	Dx= 8 0 0
+	Dy= 0 8 0
+end
+
+
+primitive sphere
+	O= 0 5 0
+	R= 10
+	color= 8 8 8
 	diff= 0.6
-    refl= 0.4
-    drefl= 0.15
-	color= 0.5 1 0.5
+	texture= sky.png
 end
