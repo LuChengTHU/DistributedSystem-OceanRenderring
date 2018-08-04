@@ -275,13 +275,22 @@ public class ObjReader {
         }
 
         for (int i = 1; i <= vCnt; i++) {
-            int cc = 0;
             Vec3d thisVn = new Vec3d(0, 0, 0);
             for (Integer f : vec2F[i]) {
-                thisVn.addToThis(tris[f].getN());
-                cc++;
+                int x = -1, y = -1;
+                for (int j = 0; j < 3; j++) {
+                    if (tris[f].getVertex(j).get() == i) {
+                        x = tris[f].getVertex ((j + 1) % 3).get();
+                        y = tris[f].getVertex ((j + 2) % 3).get();
+                        break;
+                    }
+                }
+                Vec3d ix = v[x].sub(v[i]), iy = v[y].sub(v[i]);
+                double angle = Math.abs(ix.dot(iy) / ix.module() / iy.module());
+                thisVn.addToThis(tris[f].getN().mul(angle));
             }
-            thisVn.divToThis(cc);
+            thisVn = thisVn.normalize();
+            if (thisVn.isZeroVector()) thisVn = new Vec3d(0, 0, 1);
             vnCnt++;
             vn[i] = thisVn;
         }

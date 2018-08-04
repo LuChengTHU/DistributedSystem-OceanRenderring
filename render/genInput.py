@@ -9,7 +9,7 @@ if not os.path.exists("input"):
 
 with open("input/data", "w") as f:
     lines = []
-    for i in range(760):
-        for j in range(1280):
+    for i in range(450):
+        for j in range(800):
             lines.append(str(i) + "," + str(j) + "\n")
     f.writelines(lines)
