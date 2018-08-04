@@ -13,8 +13,11 @@ render/是用java实现的path tracing，包括网格平滑、软阴影、超采
 
 
 
-最终渲染出的视频结果：
+最终渲染出的视频结果可以见：https://youtu.be/PWxAjqwj6mE
+
+一帧的结果：
+![一帧](./demo/final.png)
 
 
-
-<iframe width="560" height="315" src="https://www.youtube.com/watch?v=PWxAjqwj6mE&feature=youtu.be" frameborder="0" allowfullscreen></iframe> 
+gif版demo：
+![demo](./demo/final.gif)
